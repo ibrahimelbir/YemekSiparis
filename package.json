@@ -1,0 +1,24 @@
+{
+  "name": "yemeksiparis",
+  "version": "1.0.0",
+  "description": "Kullanıcı ve Restoran ana rollerinin olduğu yemek sipariş sistemi",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js",
+    "start": "node app"
+  },
+  "dependencies": {
+    "express"   : "*",
+    "mongoose"  : "*",
+    "bcryptjs"  : "*",
+    "cors"      : "*",
+    "dotenv"    : "*",
+    "jsonwebtoken" : "*",
+    "body-parser"  : "*",
+    "passport"     : "*",
+    "passport-jwt" : "*"
+
+  },
+  "author": "",
+  "license": "ISC"
+}
