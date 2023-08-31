@@ -52,7 +52,10 @@ const userSchema = mongoose.Schema({
 const User = module.exports = mongoose.model('User', userSchema);
 
 module.exports.getUserById =  function (id, callback) {
-    User.findById(id, callback);
+    User.findById(id)
+    .then((user)=> {return callback(null,user)})
+    .catch((err) => {return callback(err)});
+
 }
 
 module.exports.getUserByEmail = function (email, callback){

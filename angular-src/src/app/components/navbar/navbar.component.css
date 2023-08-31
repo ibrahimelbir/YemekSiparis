@@ -1,0 +1,8 @@
+.font-yemeksiparis{
+    font-family: monospace;
+    font-size: x-large;
+    font-weight: 900;
+}
+.active{
+    text-decoration: underline;
+}

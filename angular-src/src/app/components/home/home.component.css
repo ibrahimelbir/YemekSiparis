@@ -1,0 +1,10 @@
+.nav-pills .nav-link{
+    margin-bottom: 3px;
+    color: black;
+    font-size: large;
+    font-family: monospace;
+    font-weight: 900    ;
+}
+.nav-link.active{
+    background-color: orange;
+}
