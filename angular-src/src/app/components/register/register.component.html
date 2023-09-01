@@ -1,1 +1,58 @@
-<p>register works!</p>
+<form (submit)="onRegisterSubmit()">
+    <div class="row g-5 justify-content-center mb-2 mt-5 align-items-center">
+        <div class="col-3 col-lg-3 col-sm-4">
+            <label class="col-form-label">Email</label>
+        </div>
+        <div class="col-4 col-lg-4 col-sm-6 col-xs-6">
+            <input type="text" class="form-control" [(ngModel)]="email" name="email" />
+        </div>
+    </div>
+    <div class="row g-5 justify-content-center mb-2 align-items-center">
+        <div class="col-3 col-lg-3 col-sm-4">
+            <label class="col-form-label">Şifre</label>
+        </div>
+        <div class="col-4 col-lg-4 col-sm-6 col-xs-6">
+            <input type="password" class="form-control" [(ngModel)]="password" name="password" />
+        </div>
+    </div>
+    <div class="row g-5 justify-content-center mb-2 align-items-center">
+        <div class="col-3 col-lg-3 col-sm-4">
+            <label class="col-form-label">Ad</label>
+        </div>
+        <div class="col-4 col-lg-4 col-sm-6 col-xs-6">
+            <input type="text" class="form-control" [(ngModel)]="name" name="name" />
+        </div>
+    </div>
+    <div class="row g-5 justify-content-center mb-2 align-items-center">
+        <div class="col-3 col-lg-3 col-sm-4">
+            <label class="col-form-label">Soyad</label>
+        </div>
+        <div class="col-4 col-lg-4 col-sm-6 col-xs-6">
+            <input type="text" class="form-control" [(ngModel)]="surname" name="surname" />
+        </div>
+    </div>
+    <div class="row g-5 justify-content-center mb-2 align-items-center">
+        <div class="col-3 col-lg-3 col-sm-4">
+            <label class="col-form-label">Adres</label>
+        </div>
+        <div class="col-4 col-lg-4 col-sm-6 col-xs-6">
+            <input type="text" class="form-control" [(ngModel)]="adress" name="adress" />
+        </div>
+    </div>
+    <div class="row g-5 justify-content-center mb-2 align-items-center">
+        <div class="col-3 col-lg-3 col-sm-4">
+            <label class="col-form-label">Doğum Tarihi</label>
+        </div>
+        <div class="col-4 col-lg-4 col-sm-6 col-xs-6">
+            <input type="date" class="form-control" [(ngModel)]="birthdate" name="birthdate" />
+        </div>
+    </div>
+    <div class="row g-1 justify-content-center mb-2 align-items-center mt-4">
+        <div class="col-3 col-lg-3 col-sm-3 text-end">
+            <button type="button" class="btn btn-danger">Temizle</button>
+        </div>
+        <div class="col-3 col-lg-3 col-sm-3 text-start">
+            <button type="submit" class="btn btn-success">Gönder</button>
+        </div>
+    </div>
+</form>
