@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from 'src/app/services/validate.service';
 import { FlashService } from 'simple-flash-message';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+
 export class RegisterComponent implements OnInit {
   name : String;
   surname : String;
@@ -15,10 +18,9 @@ export class RegisterComponent implements OnInit {
   adress  : String;
   birthdate : Date;
 
-  constructor(private validateService: ValidateService, private flashMessage: FlashService){}
-  ngOnInit(){
-      
-  }
+  constructor(private validateService: ValidateService, private flashMessage: FlashService, private authService:AuthService, private router:Router){}
+  ngOnInit(){}
+  
   onRegisterSubmit(){
     const user ={
       email: this.email,
@@ -39,7 +41,17 @@ export class RegisterComponent implements OnInit {
       this.flashMessage.showFlash("error", "Email Hatası", "Email adresi doğru şekilde girilmelidir.")
       return false;
     }
-    this.flashMessage.showFlash("success", "Başarılı", "Başarıyla sisteme kayıt edildi.")
+    this.authService.registerUser(user).subscribe(data => {
+      
+      console.log(data)
+      if(data.success){
+        this.flashMessage.showFlash("success", "Başarılı", "Kaydınız başarıyla tamamnlandı. Sisteme giriş yapabilirsiniz.");
+        this.router.navigate(['/login']);
+      }else{
+        this.flashMessage.showFlash("error", "Hata", "Oops. Bir şeyler yanlış gitti.");
+        this.router.navigate(['/register']);
+      }
+    })
     return true;
   }
 }

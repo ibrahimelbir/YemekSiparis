@@ -13,6 +13,7 @@ mongoose.connect(db.uri).then(
         console.log("Database connection succeed.")
     }, err =>{
         console.error("Database connection failed.")
+        console.log(err);
     })
 
 const app = express();
