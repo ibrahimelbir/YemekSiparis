@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary font-yemeksiparis"style="background-color:orange !important;" >
+<nav class="navbar navbar-expand-lg bg-body-tertiary"style="background-color:orange !important;" >
     <div class="container-fluid">
-      <a [routerLink]="['/']" class="navbar-brand ms-5" href="#"><fa-icon [icon]="faBowlFood"></fa-icon> YemekSipariş</a>
+      <a [routerLink]="['/']" class="navbar-brand ms-5 font-yemeksiparis" href="#"><fa-icon [icon]="faBowlFood"></fa-icon> YemekSipariş</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -11,6 +11,7 @@
         <ul class="nav navbar-nav ms-auto me-5">
             <li [routerLinkActive]="['active']" class="nav-item"><a class="nav-link"  [routerLink]="['/register']">Kayıt</a></li>
             <li [routerLinkActive]="['active']" class="nav-item"><a class="nav-link"  [routerLink]="['/login']">Giriş</a></li>
+            <li class="nav-item"><a class="nav-link"  (click)="onLogoutClick()">Giriş</a></li>
 
         </ul>
         

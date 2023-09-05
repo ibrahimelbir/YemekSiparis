@@ -4,5 +4,5 @@
     font-weight: 900;
 }
 .active{
-    text-decoration: underline;
+    font-weight: bold;
 }

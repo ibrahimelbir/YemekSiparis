@@ -1,1 +1,23 @@
-<p>login works!</p>
+
+<form class="d-flex justify-content-center" (submit)="onLoginSubmit()">
+    <div  class="col-12 col-xl-4 col-xxl-4 col-lg-4 col-md-6 col-sm-9 mt-5" >
+        
+        <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="inputEmail" [(ngModel)] ="email" name="email">
+        </div>
+        <div class="mb-3">
+            <label for="inputPassword" class="form-label">Şifre</label>
+            <input type="password" class="form-control" id="inputPassword" [(ngModel)] ="password" name="password">
+        </div>
+    
+        <!--- Checkbox
+    
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        -->
+        <button type="submit" class="btn btn-warning col-2">Giriş</button>
+    </div>
+</form>
