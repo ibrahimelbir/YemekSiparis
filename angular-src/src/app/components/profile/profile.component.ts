@@ -20,7 +20,6 @@ export class ProfileComponent {
       this.user = profile.user;
     }, err =>{
       console.log(err);
-      console.log(123124)
       return false;
     });
   }

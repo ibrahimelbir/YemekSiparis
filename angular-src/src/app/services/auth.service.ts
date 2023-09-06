@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, } from '@angular/common/http';
 import { httpResponse } from './httpResponse';
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 
 @Injectable({
@@ -12,7 +13,9 @@ export class AuthService {
   authToken : any;
   user : any;
 
-  constructor(private http:HttpClient) { }
+  constructor(
+    private http:HttpClient,
+    private jwtHelper: JwtHelperService) { }
 
   registerUser(user:any){
     let headers = new HttpHeaders({'Content-Type': 'application/json', "Accept": "application/json"});
@@ -51,6 +54,23 @@ export class AuthService {
     this.authToken = null;
     this.user = null;
     localStorage.clear();
+    window.location.reload();
   }
+  
+  loggedIn(){
+    return !this.jwtHelper.isTokenExpired();
+  }
+
+  admin(){
+    this.loadToken();
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json', 
+      "Accept": "application/json",
+      'Authorization' : this.authToken ? this.authToken : "noauth"
+    });
+    console.log(this.http.get<httpResponse>('http://localhost:3000/dashboard', { headers : headers  }))
+    return this.http.get<httpResponse>('http://localhost:3000/dashboard', { headers : headers  });
+  }
+
 
 }

@@ -3,6 +3,7 @@ import { faBowlFood } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { FlashService } from 'simple-flash-message';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -11,7 +12,7 @@ import { FlashService } from 'simple-flash-message';
 export class NavbarComponent {
   faBowlFood = faBowlFood;
   constructor(
-    private authService : AuthService,
+    public authService : AuthService,
     private router: Router,
     private flashMessage : FlashService
   ){}

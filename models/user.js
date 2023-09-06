@@ -41,6 +41,12 @@ const userSchema = mongoose.Schema({
         required : true
     },
 
+    admin    : {
+        type : Boolean,
+        default : false,
+        required : true
+    },
+
     orders: {
         type: Array,
         default : [],

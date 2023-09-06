@@ -53,6 +53,10 @@ app.get('/', (req,res)  =>  {
     res.send('Success...');
 })
 
+app.get('*', (req,res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'))
+})
+
 app.listen(process.env.PORT, ()=>{
     console.log(`Server running on ${process.env.PORT}.`)
 })

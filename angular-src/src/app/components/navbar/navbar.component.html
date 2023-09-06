@@ -9,9 +9,11 @@
             
         </ul> -->
         <ul class="nav navbar-nav ms-auto me-5">
-            <li [routerLinkActive]="['active']" class="nav-item"><a class="nav-link"  [routerLink]="['/register']">Kayıt</a></li>
-            <li [routerLinkActive]="['active']" class="nav-item"><a class="nav-link"  [routerLink]="['/login']">Giriş</a></li>
-            <li class="nav-item"><a class="nav-link"  (click)="onLogoutClick()">Giriş</a></li>
+            <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link"  [routerLink]="['/profile']">Profil</a></li>
+            <li *ngIf="authService.loggedIn()"  class="nav-item"><a class="nav-link"  (click)="onLogoutClick()">Çıkış</a></li>
+
+            <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link"  [routerLink]="['/register']">Kayıt</a></li>
+            <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link"  [routerLink]="['/login']">Giriş</a></li>
 
         </ul>
         

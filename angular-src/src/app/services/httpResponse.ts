@@ -3,4 +3,5 @@ export interface httpResponse {
     msg: string;
     token?: string;
     user?: object;
+    admin?: boolean;
   }
