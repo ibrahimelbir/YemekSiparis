@@ -1,0 +1,13 @@
+.nav-link{
+    color: #C51605 !important;
+    border-color: #C51605 !important;
+    border-width: 1.2px;
+    border-style: solid;
+    margin-right: 5px;
+    
+}
+
+.nav-link.active{
+    color: white !important;
+    background-color: #C51605 !important;
+}

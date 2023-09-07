@@ -5,22 +5,22 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  user : any;
-  constructor(
-    private authService: AuthService,
-    private router : Router,
-    ){}
-  ngOnInit(){
+  user: any;
+  constructor(private authService: AuthService, private router: Router) {}
 
-    this.authService.getProfile().subscribe(profile => {
-      this.user = profile.user;
-    }, err =>{
-      console.log(err);
-      return false;
-    });
+  ngOnInit() {
+    this.authService.admin().subscribe(
+      (profile) => {
+        this.user = profile;
+      },
+      (err) => {
+        console.log(err);
+        return false;
+      }
+    );
   }
-  
+
 }

@@ -42,9 +42,13 @@ require('./config/passport')(passport);
 app.use(express.static(path.join(__dirname, 'public')));
 
 const user = require('./routes/user');
+const admin = require('./routes/admin');
+
 const database = require('./config/database');
 
 app.use('/', user);
+app.use('/', admin);
+
 
 
 

@@ -68,8 +68,7 @@ export class AuthService {
       "Accept": "application/json",
       'Authorization' : this.authToken ? this.authToken : "noauth"
     });
-    console.log(this.http.get<httpResponse>('http://localhost:3000/dashboard', { headers : headers  }))
-    return this.http.get<httpResponse>('http://localhost:3000/dashboard', { headers : headers  });
+    return this.http.get<boolean>('http://localhost:3000/dashboard', { headers : headers  });
   }
 
 
