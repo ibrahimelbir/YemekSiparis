@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary"style="background-color:#C51605 !important;" >
+<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" >
     <div class="container-fluid">
-      <a [routerLink]="['/']" class="navbar-brand ms-5 font-ys color-ys" href="#"><fa-icon [icon]="faBowlFood"></fa-icon> YemekSipariş</a>
+      <a [routerLink]="['/']" class="navbar-brand ms-5 font-ys color-ys-red" href="#"><fa-icon [icon]="faBowlFood"></fa-icon> YemekSipariş</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -9,12 +9,12 @@
             
         </ul> -->
         <ul class="nav navbar-nav ms-auto me-5">
-            <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys"  [routerLink]="['/profile']">Profil</a></li>
-            <li *ngIf="authService.loggedIn() && (!authService.admin())" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys"  [routerLink]="['/dashboard']">Dashboard</a></li>
+            <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/profile']">Profil</a></li>
+            <li *ngIf="authService.loggedIn() && (!authService.admin())" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/dashboard']">Dashboard</a></li>
             <li *ngIf="authService.loggedIn()"   class="nav-item"><a class="nav-link color-ys"  (click)="onLogoutClick()">Çıkış</a></li>
 
-            <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys"  [routerLink]="['/register']">Kayıt</a></li>
-            <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys"  [routerLink]="['/login']">Giriş</a></li>
+            <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/register']">Kayıt</a></li>
+            <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/login']">Giriş</a></li>
 
         </ul>
         

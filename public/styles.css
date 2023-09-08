@@ -2,6 +2,57 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[2]!./src/styles.css?ngGlobalStyle ***!
   \**********************************************************************************************************************************************************************************************************************/
 /* You can add global styles to this file, and also import other style files */
+.font-ys{
+    font-family: monospace;
+    font-size: x-large;
+    font-weight: 900;
+}
+.color-ys{
+    color: #F8F9fA !important;
+}
+.color-ys-orange{
+    color: #FD8D14 !important;
+}
+.color-ys-yellow{
+    color: #FFE17B !important;
+}
+.color-ys-red{
+    color: #C51605 !important;
+}
+.color-ys-green{
+    color: #CECE5A !important;
+}
 
+.bg-color-ys{
+    background-color: #F8F9fA !important;
+}
+.bg-color-ys-orange{
+    background-color: #FD8D14 !important;
+}
+.bg-color-ys-yellow{
+    background-color: #FFE17B !important;
+}
+.bg-color-ys-red{
+    background-color: #C51605 !important;
+}
+.bg-color-ys-green{
+    background-color: #CECE5A !important;
+}
+
+.br-color-ys{
+    border-color: #F8F9fA !important;
+}
+.br-color-ys-orange{
+    border-color: #FD8D14 !important;
+}
+.br-color-ys-yellow{
+    border-color: #FFE17B !important;
+}
+.br-color-ys-red{
+    border-color: #C51605 !important;
+}
+.br-color-ys-green{
+    border-color: #CECE5A !important;
+}
 
 /*# sourceMappingURL=styles.css.map*/

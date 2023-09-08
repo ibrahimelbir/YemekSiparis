@@ -16,11 +16,12 @@ import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule, FaIconLibrary, FaDuotoneIconComponent } from '@fortawesome/angular-fontawesome';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 
 import { ProductsComponent } from './components/products/products.component';
+import { faStarOfLife } from '@fortawesome/free-solid-svg-icons';
 
 export function tokenGetter() {
   return localStorage.getItem("id_token");
@@ -62,4 +63,10 @@ const appRoutes : Routes = [
   providers: [ValidateService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(
+    library: FaIconLibrary,
+  ){
+    library.addIcons(faStarOfLife);
+  }
+}

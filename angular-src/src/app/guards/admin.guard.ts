@@ -10,7 +10,7 @@ export class AdminGuard{
     ){}
 
     canActivate(){
-        if(!this.authService.admin()){
+        if(this.authService.admin()){
             return true;
         }else{
             this.router.navigate(['profile']);
