@@ -47,7 +47,7 @@ const admin = require('./routes/admin');
 const database = require('./config/database');
 
 app.use('/', user);
-app.use('/', admin);
+app.use('/dashboard', admin);
 
 
 

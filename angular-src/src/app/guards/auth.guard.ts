@@ -17,13 +17,5 @@ export class AuthGuard{
             return false;
         }
     }
-    canAdmin(){
-        if(this.authService.admin()){
-            return true;
-        }else{
-            this.router.navigate(['profile']);
-            return false;
-        }
-    }
 
 }

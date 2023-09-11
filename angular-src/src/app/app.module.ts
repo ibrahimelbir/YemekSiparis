@@ -32,7 +32,7 @@ const appRoutes : Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]},
-  {path: 'dashboard', component: DashboardComponent, canActivate:[AdminGuard]}
+  {path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard,AdminGuard]}
 ]
 
 @NgModule({
@@ -60,7 +60,7 @@ const appRoutes : Routes = [
     })
   ],
   exports: [RouterModule],
-  providers: [ValidateService, AuthService, AuthGuard],
+  providers: [ValidateService, AuthService, AuthGuard, AdminGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {

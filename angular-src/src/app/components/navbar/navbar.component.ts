@@ -16,9 +16,11 @@ export class NavbarComponent {
     private router: Router,
     private flashMessage : FlashService
   ){}
-  ngOnInit(){}
+  ngOnInit(){
+  }
   onLogoutClick(){
      this.authService.logout();
      this.flashMessage.showFlash('success', 'Başarılı!', "Başarıyla çıkış yapıldı.")
+     
   }
 }

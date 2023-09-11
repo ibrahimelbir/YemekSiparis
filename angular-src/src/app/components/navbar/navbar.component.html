@@ -10,8 +10,8 @@
         </ul> -->
         <ul class="nav navbar-nav ms-auto me-5">
             <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/profile']">Profil</a></li>
-            <li *ngIf="authService.loggedIn() && (!authService.admin())" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/dashboard']">Dashboard</a></li>
-            <li *ngIf="authService.loggedIn()"   class="nav-item"><a class="nav-link color-ys"  (click)="onLogoutClick()">Çıkış</a></li>
+            <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/dashboard']">Dashboard</a></li>
+            <li *ngIf="authService.loggedIn()"   class="nav-item"><a class="nav-link color-ys-red"  (click)="onLogoutClick()">Çıkış</a></li>
 
             <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/register']">Kayıt</a></li>
             <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item"><a class="nav-link color-ys-red"  [routerLink]="['/login']">Giriş</a></li>

@@ -9,15 +9,23 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent {
   user: any;
+  admin: boolean;
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authService.admin().subscribe(
+    this.authService.getProfile().subscribe(
       (profile) => {
-        this.user = profile;
+        this.user = profile.user;
       },
       (err) => {
-        console.log(err);
+        return false;
+      }
+    );
+    this.authService.admin().subscribe(
+      (admin) => {
+        this.admin = admin;
+      },
+      (err) => {
         return false;
       }
     );

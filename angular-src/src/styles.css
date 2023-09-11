@@ -51,3 +51,9 @@
 .br-color-ys-green{
     border-color: #CECE5A !important;
 }
+
+body{
+    background-image:   url("./images/background.jpg");
+    background-size:    50%;
+    
+}
