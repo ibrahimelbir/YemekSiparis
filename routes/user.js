@@ -31,7 +31,8 @@ router.post('/login', (req, res, next) => {
                         surname: user.surname,
                         adress: user.adress,
                         birthdate: user.birthdate,
-                        email: user.email
+                        email: user.email,
+                        admin: user.admin
                     }
                 })
             } else {

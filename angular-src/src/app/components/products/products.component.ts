@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faCaretDown, faStarOfLife } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCoins, faStarOfLife, faTurkishLiraSign } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-products',
@@ -9,4 +9,5 @@ import { faCaretDown, faStarOfLife } from '@fortawesome/free-solid-svg-icons';
 export class ProductsComponent {
   faStarOfLife = faStarOfLife;
   faCaretDown = faCaretDown;
+  faTurkishLiraSign = faTurkishLiraSign;
 }

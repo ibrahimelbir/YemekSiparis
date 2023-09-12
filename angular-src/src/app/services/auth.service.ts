@@ -86,4 +86,13 @@ export class AuthService {
         })
       );
   }
+  getAdmin(){
+    return this.admin().subscribe(res => {
+      if(res){
+          return true;
+      }else{
+          return false;
+      }
+  })
+  }
 }

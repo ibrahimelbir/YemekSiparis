@@ -21,14 +21,7 @@ export class DashboardComponent {
         return false;
       }
     );
-    this.authService.admin().subscribe(
-      (admin) => {
-        this.admin = admin;
-      },
-      (err) => {
-        return false;
-      }
-    );
   }
+  
 
 }
