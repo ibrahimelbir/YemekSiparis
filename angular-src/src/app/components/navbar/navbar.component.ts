@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { faBowlFood } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { FlashService } from 'simple-flash-message';
 
 @Component({
@@ -13,21 +13,31 @@ export class NavbarComponent {
   admin:boolean;
   isLoggedIn = false;
   faBowlFood = faBowlFood;
+  someSubscription: any;
+
   constructor(
     public authService: AuthService,
     private router: Router,
     private flashMessage: FlashService
   ) {
-
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+    this.someSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Here is the dashing line comes in the picture.
+        // You need to tell the router that, you didn't visit or load the page previously, so mark the navigated flag to false as below.
+        this.router.navigated = false;
+      }
+    });
   }
   ngOnInit() {
-    this.router.events.subscribe(event => {
-      if (event.constructor.name === "NavigationEnd") {
-       this.isLoggedIn = this.authService.loggedIn()
-      }
-    })
-    let data = JSON.parse(localStorage.getItem('user') || '{"admin": false}')
-    this.admin = data.admin;
+    
+  }
+  ngOnDestroy() {
+    if (this.someSubscription) {
+      this.someSubscription.unsubscribe();
+    }
   }
   onLogoutClick() {
     this.authService.logout();
@@ -38,7 +48,7 @@ export class NavbarComponent {
     );
   }
   getAdmin() {
-    return this.authService.admin().subscribe((res) => {
+    return this.authService.admins().subscribe((res) => {
       if (res) {
         return true;
       } else {

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent {
   user : any;
+  admin: any;
   constructor(
     private authService: AuthService,
     private router : Router,
@@ -18,6 +19,7 @@ export class ProfileComponent {
   ngOnInit(){
     this.authService.getProfile().subscribe(profile => {
       this.user = profile.user;
+      this.admin = this.user?.admin;
     }, err =>{
       console.log(err);
       return false;

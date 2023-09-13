@@ -44,7 +44,7 @@ const appRoutes : Routes = [
     HomeComponent,
     ProfileComponent,
     DashboardComponent,
-    ProductsComponent
+    ProductsComponent,
   ],
   imports: [
     BrowserModule,

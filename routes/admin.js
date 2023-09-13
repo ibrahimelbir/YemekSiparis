@@ -16,6 +16,9 @@ router.post('/product/add', passport.authenticate('jwt', {session: false}), (req
         name        : req.body.name,
         description : req.body.description,
         price       : req.body.price,
+        category    : req.body.category,
+        time        : req.body.time,
+        image       : req.body.image,
         addedby     : req.user.email
     });
     newProduct.save()

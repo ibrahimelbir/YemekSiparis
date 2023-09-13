@@ -10,6 +10,7 @@ import { map } from 'rxjs';
 export class AuthService {
   authToken: any;
   user: any;
+  admin: any;
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
@@ -71,7 +72,7 @@ export class AuthService {
     return !this.jwtHelper.isTokenExpired();
   }
 
-  admin() {
+  admins() {
     this.loadToken();
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -87,12 +88,16 @@ export class AuthService {
       );
   }
   getAdmin(){
-    return this.admin().subscribe(res => {
+    return this.admins().subscribe(res => {
       if(res){
           return true;
       }else{
           return false;
       }
   })
+  }
+  getAdminData(){
+    let data = JSON.parse(localStorage.getItem('user') || '{"admin": false}')
+    return data.admin;
   }
 }

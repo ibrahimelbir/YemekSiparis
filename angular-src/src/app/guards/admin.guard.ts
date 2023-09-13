@@ -10,7 +10,7 @@ export class AdminGuard{
     ){}
 
     canActivate(){
-        return this.authService.admin().subscribe(res => {
+        return this.authService.admins().subscribe(res => {
             if(res){
                 return true;
             }else{
