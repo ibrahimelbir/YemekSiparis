@@ -4,4 +4,5 @@ export interface httpResponse {
     token?: string;
     user?: object;
     admin?: boolean;
+    products?: any;
   }

@@ -39,9 +39,9 @@ router.delete('/product/delete', passport.authenticate('jwt', {session: false}),
         .catch((err) => {res.json({success: false, msg : 'Failed to delete product.', err: err})});
 })
 
-router.get('/product/list', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.get('/product/list',  (req, res, next) => {
     
-    Product.find({})
+    Product.find({}).sort({"joindate":-1})
             .then((products)=> {res.json({success: true, msg : 'Products listed.', products: products})})
             .catch((err) => {res.json({success: false, msg : 'Failed to add product.', err: err})});
     
