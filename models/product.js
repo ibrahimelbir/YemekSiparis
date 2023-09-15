@@ -49,12 +49,18 @@ const productSchema = mongoose.Schema({
 
 const Product = module.exports = mongoose.model('Product', productSchema);
 
-module.exports.getUserById =  function (id, callback) {
+module.exports.getProductById =  function (id, callback) {
     Product.findById(id)
     .then((user)=> {return callback(null,user)})
     .catch((err) => {return callback(err)});
 
-}
+}/*
+module.exports.findByIdAndUpdate =  function (id, data, callback) {
+    Product.findByIdAndUpdate(id, data)
+    .then((user)=> {return callback(null,user)})
+    .catch((err) => {return callback(err)});
+
+}*/
 
 module.exports.getProductByName = function (name, callback){
     const query = { name : name }
