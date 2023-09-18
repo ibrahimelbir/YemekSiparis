@@ -36,6 +36,17 @@
                     </tr>
                 </thead>
                 <tbody id="tbody">
+                    <tr *ngFor="let data of dataset">
+                        <td>{{data['image']}}</td>
+                        <td>{{data['name']}}</td>
+                        <td>{{data['category']}}</td>
+                        <td style="white-space: break-spaces;">{{data['description']}}</td>
+                        <td>{{data['price']}}</td>
+                        <td>{{data['joindate'] | date:'dd/MM/yyyy' }}</td>
+                        <td>{{data['addedby']}}</td>
+                        <td>{{data['time']}}</td>
+                        <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -50,3 +61,48 @@
         </div>
     </div>
 </div>
+<div *ngFor="let data of dataset" class="modal fade" [id]="'editModal_' + data['_id']" tabindex="-1"  [attr.aria-labelledby]="'#editModal_' + data['_id']" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <form [id]="'editForm_'+data['_id']" (submit)="onEditSubmit( data['_id'] )">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" [id]="'editModalLabel_' + data['_id']">Düzenle : {{data['name']}} ({{data['_id']}}) </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+          <div class="modal-body">
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['name']" name="floatingInputName">
+              <label class="fw-bold">Yemek Adı</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['category']" name="floatingInputCategory">
+              <label class="fw-bold">Kategori</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['description']" name="floatingInputDescription" >
+              <label class="fw-bold">Açıklama</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['price']" name="floatingInputPrice" >
+              <label class="fw-bold">Fiyat</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['time']" name="floatingInputTime">
+              <label class="fw-bold">Süre</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['image']" name="floatingInputImage">
+              <label class="fw-bold">Resim</label>
+            </div>
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            <button type="submit" class="btn btn-success">Kaydet</button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

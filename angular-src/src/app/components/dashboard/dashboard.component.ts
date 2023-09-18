@@ -1,13 +1,18 @@
-import { Component } from '@angular/core';
+
+import { Component,AfterViewInit,Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import * as bootstrap from "bootstrap";
 import DataTable from 'datatables.net-dt';
 import 'datatables.net-rowreorder-dt';
 import 'datatables.net-responsive-dt';
 import 'datatables.net-buttons-dt';
+const lang = require('datatables.net/tr.json');
 
-import * as $ from 'jquery';
+
 import { ManageService } from 'src/app/services/manage.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,36 +20,52 @@ import { ManageService } from 'src/app/services/manage.service';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
+  itemForms: { [key: string]: FormGroup } = {};
   user: any;
   admin: boolean;
-  
-  id : any;
-  name: any;
-  description : any;
-  price       : any;
-  category    : any;
-  time        : any;
-  image       : any;
-  
-  constructor(private authService: AuthService, private router: Router, private manageService: ManageService) {}
-  onEditSubmit(id:any){
-    const data= {
-        id  : this.id,
-        name          : this.name,
-        description : this.description,
-        price       : this.price,
-        category    : this.category,
-        time        : this.time,
-        image       : this.image
-    };
-    console.log(data)
-      this.manageService.editProduct(this.id, data).subscribe(res => {
-        console.log(res)
-      }, err =>{
-        console.error(err)
-      })
+  dataset: any[] = [];
+  id: any;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private manageService: ManageService,
+    private formBuilder: FormBuilder,
+    private renderer: Renderer2
+  ) {
   }
-  ngOnInit() {
+  onEditSubmit(id: any) {
+    
+    let name = $(`#editForm_${id}`).find("[name='floatingInputName']").val();
+    let description = $(`#editForm_${id}`).find("[name='floatingInputDescription']").val();
+    let price = $(`#editForm_${id}`).find("[name='floatingInputPrice']").val();
+    let category = $(`#editForm_${id}`).find("[name='floatingInputCategory']").val();
+    let time = $(`#editForm_${id}`).find("[name='floatingInputTime']").val();
+    let image = $(`#editForm_${id}`).find("[name='floatingInputImage']").val();
+    
+    const data = {
+      id: id,
+      name: name,
+      description: description,
+      price: price,
+      category: category,
+      time: time,
+      image: image,
+    };
+    console.log(data);
+
+    this.manageService.editProduct(id, data).subscribe(
+      (res) => {
+        console.log(res);
+        $(`#editModal_${id}`).modal("hide");
+      },
+      (err) => {
+        console.error(err);
+      }
+    )
+  }
+
+  async ngOnInit() {
     var self = this;
     this.authService.getProfile().subscribe(
       (profile) => {
@@ -53,11 +74,88 @@ export class DashboardComponent {
       (err) => {
         return false;
       }
-      
+    );
+    let table: any;
+    //<img src="${data['image']}">
+    let x = await this.manageService.getAllProduct().subscribe(
+      (data) => {
+        this.dataset = data.products;
+        $(document).ready(function () {
+          new DataTable('#example',{
+             autoWidth: false,
+             responsive: true,
+             destroy: true,
+             language: lang,
+            //  columns: [
+            //    { data: 'image' },
+            //    { data: 'name' },
+            //    { data: 'category' },
+            //    { data: 'description' },
+            //    { data: 'price' },
+            //    { data: 'joindate' },
+            //    { data: 'addedby' },
+            //    { data: 'time' },
+            //  ],
+             columnDefs: [
+              {
+                orderable: false,
+                target: 0
+              },
+              {
+                 orderable: true,
+                 className: 'reorder',
+                 targets: 1,
+                 searchable: true,
+                 responsivePriority: 7,
+               },
+               {
+                 orderable: true,
+                 className: 'reorder',
+                 targets: 2,
+                 searchable: true,
+                 responsivePriority: 6,
+               },
+               {
+                 orderable: true,
+                 className: 'reorder',
+                 targets: 3,
+                 searchable: true,
+               },
+               {
+                 orderable: true,
+                 className: 'reorder',
+                 targets: 4,
+                 searchable: true,
+                 type: 'num',
+                 responsivePriority: 5,
+               },
+               {
+                 orderable: true,
+                 className: 'reorder',
+                 targets: 5,
+                 searchable: true,
+                 type: 'date-eu',
+               },
+               {
+                 orderable: true,
+                 className: 'reorder',
+                 targets: 8,
+                 searchable: true,
+                 responsivePriority: 8,
+               },
+     
+               { orderable: false, searchable: false, targets: '_all' },
+             ],
+             dom: 'frtip',
+           });
+         });
+      },
+      (error) => {
+        console.error(error);
+      }
     );
     
-    let table:any;
-    //<img src="${data['image']}">
+    /*
     this.manageService.getAllProduct().subscribe(dataset => {
       $(document).ready(function () {
         for(let data of dataset.products){
@@ -79,7 +177,7 @@ export class DashboardComponent {
             <div class="modal fade" id="editModal_${data['_id']}" tabindex="-1" aria-labelledby="editModalLabel_${data['_id']}" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
-                <form [formGroup]="myForm" id="editForm_${data['_id']}" (ngSubmit)='onEditSubmit()'>
+                <form [formGroup]="myForm" id="editForm_${data['_id']}">
                   <div class="modal-header">
                     <h1 class="modal-title fs-5" id="editModalLabel_${data['_id']}">Düzenle : ${data['name']} (${data['_id']}) </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -122,29 +220,21 @@ export class DashboardComponent {
               </div>
             </div>
           `);
+      $(`#editForm_${data['_id']}`)
+      .attr('formGroup', 'myForm') // Set the formGroup attribute
+        .on('submit', (event) => {
+        event.preventDefault();
+        self.onEditSubmit(data['_id']);
+      });
+
         }
         
         //${data['_id']}
-        table = new DataTable('#example', {
-          "autoWidth": false,
-          responsive: true,
-          columnDefs: [
-            { orderable: true,  className: 'reorder', targets: 1 ,searchable:true, responsivePriority:7 },
-            { orderable: true,  className: 'reorder', targets: 2 ,searchable:true, responsivePriority:6  },
-            { orderable: true,  className: 'reorder', targets: 3 ,searchable:true },
-            { orderable: true,  className: 'reorder', targets: 4 ,searchable:true, type:'num', responsivePriority:5 },
-            { orderable: true,  className: 'reorder', targets: 5 ,searchable:true, type:'date-eu' },
-            { orderable: true,  className: 'reorder', targets: 8 ,searchable:true, responsivePriority:8 },
-            
-            { orderable: false, searchable:false, targets: '_all' },
-          ],
-          dom: 'frtip',
-        });
         
       }); 
-
+      
     });
-
+    */
     
     /*
     DOM 
@@ -156,43 +246,29 @@ export class DashboardComponent {
       p - pagination control
       r - processing display element
     */
-      $(document).on('click', '.btn-action', function(btn) {
+    $(document).on('click', '.btn-action', function (btn) {
+      let datas: any = $(this).attr('value')?.split('_');
 
-        let datas:any = $(this).attr('value')?.split('_');
-  
-        console.log(btn)
-  
-        if(datas[0] == "delete"){
-  
-          self.manageService.deleteProduct(datas[1]).subscribe(res => {
-            console.log(res)
-            table.
-            row( $(this).parents('tr') )
-            .remove()
-            .draw();
-            
-  
-          },err => {console.log(err)})
-  
-        }else if(datas[0] == "info"){
-  
-          console.log("info " + datas[1])
-  
-        }else if(datas[0] == "edit"){
-  
-          console.log("edit " + datas[1])
-  
-        }
-  
-      })
-    
-    
-    
+      console.log(btn);
 
-    
-    
-
-
+      if (datas[0] == 'delete') {
+        self.manageService.deleteProduct(datas[1]).subscribe(
+          (res) => {
+            console.log(res);
+            table.row($(this).parents('tr')).remove().draw();
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else if (datas[0] == 'info') {
+        console.log('info ' + datas[1]);
+      } else if (datas[0] == 'edit') {
+        console.log('edit ' + datas[1]);
+      }
+    });
   }
-  
+  ngAfterViewInit() {
+     
+  }
 }

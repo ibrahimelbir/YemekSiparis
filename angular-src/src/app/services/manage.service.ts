@@ -44,20 +44,17 @@ export class ManageService {
     );
   }
   editProduct(id: any, data:any) {
-    console.log(id)
-    let opts = {
-      headers : new HttpHeaders({
+    let  headers = new HttpHeaders({
         'Content-Type': 'application/json',
         Accept: 'application/json',
         Authorization: this.authService.authToken
           ? this.authService.authToken
           : 'noauth',
-      }),
-      body: data
-    };
+      })
+    
     return this.http.post<httpResponse>(
       'http://localhost:3000/dashboard/product/edit',
-      opts
+      data, {headers: headers}
     );
   }
 }

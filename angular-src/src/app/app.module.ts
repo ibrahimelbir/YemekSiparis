@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import * as $ from 'jquery';
 
 import { FlashModule } from 'simple-flash-message';
 import { ValidateService } from './services/validate.service';

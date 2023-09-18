@@ -54,13 +54,16 @@ module.exports.getProductById =  function (id, callback) {
     .then((user)=> {return callback(null,user)})
     .catch((err) => {return callback(err)});
 
-}/*
-module.exports.findByIdAndUpdate =  function (id, data, callback) {
-    Product.findByIdAndUpdate(id, data)
+}
+
+module.exports.deleteProductByCategory =  function (categoryId, callback) {
+    const query = { category : categoryId }
+    
+    Product.deleteMany(query)
     .then((user)=> {return callback(null,user)})
     .catch((err) => {return callback(err)});
 
-}*/
+}
 
 module.exports.getProductByName = function (name, callback){
     const query = { name : name }
