@@ -5,4 +5,7 @@ export interface httpResponse {
     user?: object;
     admin?: boolean;
     products?: any;
+    categories?: any;
+    users?:any;
+    orders?:any;
   }

@@ -10,12 +10,12 @@
                 type="button" role="tab" aria-controls="category-tab-pane" aria-selected="false">Kategori Yönetimi</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member-tab-pane"
-                type="button" role="tab" aria-controls="member-tab-pane" aria-selected="false">Üye Yönetimi</button>
-        </li>
-        <li class="nav-item" role="presentation">
             <button class="nav-link" id="order-tab" data-bs-toggle="tab" data-bs-target="#order-tab-pane"
                 type="button" role="tab" aria-controls="order-tab-pane" aria-selected="false">Sipariş Yönetimi</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member-tab-pane"
+                type="button" role="tab" aria-controls="member-tab-pane" aria-selected="false">Üye Yönetimi</button>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -36,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody id="tbody">
-                    <tr *ngFor="let data of dataset">
+                    <tr *ngFor="let data of datasetProduct">
                         <td>{{data['image']}}</td>
                         <td>{{data['name']}}</td>
                         <td>{{data['category']}}</td>
@@ -45,57 +45,156 @@
                         <td>{{data['joindate'] | date:'dd/MM/yyyy' }}</td>
                         <td>{{data['addedby']}}</td>
                         <td>{{data['time']}}</td>
-                        <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                        <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editProductModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="tab-pane fade" id="category-tab-pane" role="tabpanel" aria-labelledby="category-tab" tabindex="0">
             Kategori
+            <table id="tableCategory" class="table table-striped" style="width:100%">
+              <thead>
+                  <tr>
+                      <th>Kategori Adı</th>
+                      <th>Aktiflik Durumu</th>
+                      <th>Eklenme Tarihi</th>
+                      <th>Ekleyen Kişi</th>
+                      <th>Eylemler</th>
+                  </tr>
+              </thead>
+              <tbody id="tbody">
+                  <tr *ngFor="let data of datasetCategory">
+                      <td>{{data['name']}}</td>
+                      <td>{{data['valid']}}</td>
+                      <td>{{data['createdate'] | date:'dd/MM/yyyy' }}</td>
+                      <td>{{data['addedby']}}</td>
+                      <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editCategoryModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="order-tab-pane" role="tabpanel" aria-labelledby="order-tab" tabindex="0">
+            Sipariş
+            <table id="tableOrder" class="table table-striped" style="width:100%">
+              <thead>
+                  <tr>
+                      <th>Ürün</th>
+                      <th>Müşteri</th>
+                      <th>Not</th>
+                      <th>Sipariş Tarihi</th>
+                      <th>Durum</th>
+                      <th>Eylemler</th>
+                  </tr>
+              </thead>
+              <tbody id="tbody">
+                  <tr *ngFor="let data of datasetOrder">
+                      <td>{{data['product']}}</td>
+                      <td>{{data['customer']}}</td>
+                      <td>{{data['note']}}</td>
+                      <td>{{data['orderdate'] | date:'dd.MM.yyyy' }}</td>
+                      <td>{{data['status']}}</td>
+                      <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editOrderModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                  </tr>
+              </tbody>
+          </table>
         </div>
         <div class="tab-pane fade" id="member-tab-pane" role="tabpanel" aria-labelledby="member-tab" tabindex="0">
             Üye
         </div>
-        <div class="tab-pane fade" id="order-tab-pane" role="tabpanel" aria-labelledby="member-tab" tabindex="0">
-            Sipariş
-        </div>
     </div>
 </div>
-<div *ngFor="let data of dataset" class="modal fade" [id]="'editModal_' + data['_id']" tabindex="-1"  [attr.aria-labelledby]="'#editModal_' + data['_id']" aria-hidden="true">
+
+
+<div *ngFor="let data of datasetProduct" class="modal fade" [id]="'editProductModal_' + data['_id']" tabindex="-1"  [attr.aria-labelledby]="'#editProductModal_' + data['_id']" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-      <form [id]="'editForm_'+data['_id']" (submit)="onEditSubmit( data['_id'] )">
+      <form [id]="'editProductForm_'+data['_id']" (submit)="onEditProductSubmit( data['_id'] )">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" [id]="'editModalLabel_' + data['_id']">Düzenle : {{data['name']}} ({{data['_id']}}) </h1>
+          <h1 class="modal-title fs-5" [id]="'editProductModalLabel_' + data['_id']">Düzenle : {{data['name']}} ({{data['_id']}}) </h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
           <div class="modal-body">
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control" [(ngModel)] ="data['name']" name="floatingInputName">
+              <input type="text" class="form-control" [(ngModel)] ="data['name']" name="floatingInputProductName">
               <label class="fw-bold">Yemek Adı</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control" [(ngModel)] ="data['category']" name="floatingInputCategory">
+              <input type="text" class="form-control" [(ngModel)] ="data['category']" name="floatingInputProductCategory">
               <label class="fw-bold">Kategori</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control" [(ngModel)] ="data['description']" name="floatingInputDescription" >
+              <input type="text" class="form-control" [(ngModel)] ="data['description']" name="floatingInputProductDescription" >
               <label class="fw-bold">Açıklama</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control" [(ngModel)] ="data['price']" name="floatingInputPrice" >
+              <input type="text" class="form-control" [(ngModel)] ="data['price']" name="floatingInputProductPrice" >
               <label class="fw-bold">Fiyat</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control" [(ngModel)] ="data['time']" name="floatingInputTime">
+              <input type="text" class="form-control" [(ngModel)] ="data['time']" name="floatingInputProductTime">
               <label class="fw-bold">Süre</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control" [(ngModel)] ="data['image']" name="floatingInputImage">
+              <input type="text" class="form-control" [(ngModel)] ="data['image']" name="floatingInputProductImage">
               <label class="fw-bold">Resim</label>
             </div>
           
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            <button type="submit" class="btn btn-success">Kaydet</button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let data of datasetCategory" class="modal fade" [id]="'editCategoryModal_' + data['_id']" tabindex="-1"  [attr.aria-labelledby]="'#editCategoryModal_' + data['_id']" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <form [id]="'editCategoryForm_'+data['_id']" (submit)="onEditCategorySubmit( data['_id'] )">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" [id]="'editCategoryModalLabel_' + data['_id']">Düzenle : {{data['name']}} ({{data['_id']}}) </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+          <div class="modal-body">
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['name']" name="floatingInputCategoryName">
+              <label class="fw-bold">Kategori Adı</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['valid']" name="floatingInputCategoryValid">
+              <label class="fw-bold">Aktiflik Durumu</label>
+            </div>          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            <button type="submit" class="btn btn-success">Kaydet</button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngFor="let data of datasetOrder" class="modal fade" [id]="'editOrderModal_' + data['_id']" tabindex="-1"  [attr.aria-labelledby]="'#editOrderModal_' + data['_id']" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <form [id]="'editOrderForm_'+data['_id']" (submit)="onEditOrderSubmit( data['_id'] )">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" [id]="'editOrderModalLabel_' + data['_id']">Düzenle : {{data['name']}} ({{data['_id']}}) </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+          <div class="modal-body">
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)] ="data['status']" name="floatingInputOrderStatus">
+              <label class="fw-bold">Sipariş Durumu</label>
+            </div>          
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>

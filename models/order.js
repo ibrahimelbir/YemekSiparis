@@ -8,7 +8,7 @@ const orderSchema = mongoose.Schema({
     },
 
     customer    : {
-        type : Boolean,
+        type : String,
         required : true,
     },
 
@@ -41,4 +41,8 @@ module.exports.getCategoryById =  function (id, callback) {
 module.exports.getOrdersByCustomer = function (id, callback){
     const query = { customer : id }
     Category.find(query).then((data) => {;return callback(null,data)}).catch((err) => {return callback(err)});
+}
+
+module.exports.deleteById = function (id, callback){
+    Category.findOneAndDelete(id).then((data) => {;return callback(null,data)}).catch((err) => {return callback(err)});
 }

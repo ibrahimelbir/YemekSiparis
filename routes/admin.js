@@ -58,7 +58,18 @@ router.get('/product/list',  (req, res, next) => {
 })
 
 // Category
-
+router.post('/category/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    let newCategory = new Category({
+        name        : req.body.name,
+        valid       : req.body.valid,
+        addedby     : req.user.id
+    });
+    newCategory.save()
+    
+            .then((categories)=> {res.json({success: true, msg : 'Category added.', categories: categories})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to edit category.', err: err})});
+    
+})
 router.post('/category/edit', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     let edited = {
         name        : req.body.name,
@@ -93,6 +104,76 @@ router.get('/category/list',  (req, res, next) => {
     Category.find({}).sort({"joindate":-1})
             .then((categories)=> {res.json({success: true, msg : 'Categories listed.', categories: categories})})
             .catch((err) => {res.json({success: false, msg : 'Failed to add category.', err: err})});
+    
+})
+
+
+// User
+router.get('/user/list', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    
+    User.find({})
+            .then((categories)=> {res.json({success: true, msg : 'Categories listed.', categories: categories})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to add category.', err: err})});
+    
+})
+
+router.post('/user', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    console.log(req.body.id)
+    User.findById(req.body.id)
+            .then((users)=> {res.json({success: true, msg : 'User found.', users: users})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find user.', err: err})});
+    
+})
+
+// Order
+
+
+router.post('/order/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    let newOrder = new Order({
+        product     : req.body.product,
+        customer    : req.user.email,
+        note        :  req.body.note ? req.body.note : ''
+
+    })
+    newOrder.save()
+            .then((orders)=> {res.json({success: true, msg : 'Order added.', orders: orders})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to add order.', err: err})});
+    
+})
+
+router.delete('/order/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    Order.deleteById(req.body.id).save()
+            .then((orders)=> {res.json({success: true, msg : 'Order deleted.', orders: orders})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to delete order.', err: err})});
+    
+})
+
+router.post('/order', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    
+    
+    Order.findById(req.body.id)
+            .then((orders)=> {res.json({success: true, msg : 'Order found.', orders: orders})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find order.', err: err})});
+    
+})
+
+router.post('/order/list', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    
+    
+    Order.find({})
+            .then((orders)=> {res.json({success: true, msg : 'Orders listed.', orders: orders})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to list orders.', err: err})});
+    
+})
+
+router.post('/order/edit', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    let edited = {
+        status       : req.body.status,
+    };
+    Order.findByIdAndUpdate(req.body.id, edited)
+    
+            .then((orders)=> {res.json({success: true, msg : 'Order edited.', orders: orders})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to edit order.', err: err})});
     
 })
 
