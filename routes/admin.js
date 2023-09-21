@@ -131,7 +131,7 @@ router.post('/user', passport.authenticate('jwt', {session: false}), (req, res, 
 router.post('/order/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     let newOrder = new Order({
         product     : req.body.product,
-        customer    : req.user.email,
+        customer    : req.user.id,
         note        :  req.body.note ? req.body.note : ''
 
     })
@@ -176,5 +176,15 @@ router.post('/order/edit', passport.authenticate('jwt', {session: false}), (req,
             .catch((err) => {res.json({success: false, msg : 'Failed to edit order.', err: err})});
     
 })
+
+router.post('/product/findByCategory', (req, res, next) => {
+    
+    Product.find({category: req.body.category})
+    
+            .then((products)=> {res.json({success: true, msg : 'Products that belongs to '+ req.body.category +' list.', products: products})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find products.', err: err})});
+    
+})
+
 
 module.exports = router;

@@ -24,7 +24,6 @@ import { from } from 'rxjs';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  itemForms: { [key: string]: FormGroup } = {};
   user: any;
   admin: boolean;
   datasetProduct: any[] = [];
@@ -40,22 +39,22 @@ export class DashboardComponent {
     private renderer: Renderer2
   ) {}
   onEditProductSubmit(id: any) {
-    let name = $(`#editForm_${id}`)
+    let name = $(`#editProductForm_${id}`)
       .find("[name='floatingInputProductName']")
       .val();
-    let description = $(`#editForm_${id}`)
+    let description = $(`#editProductForm_${id}`)
       .find("[name='floatingInputProductDescription']")
       .val();
-    let price = $(`#editForm_${id}`)
+    let price = $(`#editProductForm_${id}`)
       .find("[name='floatingInputProductPrice']")
       .val();
-    let category = $(`#editForm_${id}`)
+    let category = $(`#editProductForm_${id}`)
       .find("[name='floatingInputProductCategory']")
       .val();
-    let time = $(`#editForm_${id}`)
+    let time = $(`#editProductForm_${id}`)
       .find("[name='floatingInputProductTime']")
       .val();
-    let image = $(`#editForm_${id}`)
+    let image = $(`#editProductForm_${id}`)
       .find("[name='floatingInputProductImage']")
       .val();
 
@@ -68,7 +67,7 @@ export class DashboardComponent {
       time        : time,
       image       : image,
     };
-
+    console.log(data)
     this.manageService.editProduct(id, data).subscribe(
       (res) => {
         console.log(res);
@@ -107,7 +106,7 @@ export class DashboardComponent {
 
   onEditOrderSubmit(id: any) {
     let status = $(`#editOrderForm_${id}`)
-      .find("[name='floatingInputOrderStatus]")
+      .find("[name='floatingInputOrderStatus']")
       .val();
 
     const data = {
@@ -125,7 +124,27 @@ export class DashboardComponent {
       }
     );
   }
-
+  loadDatasetProduct(){
+    this.manageService.getAllProduct().subscribe(
+      (data) => {
+        this.datasetProduct = data.products;
+      })
+  }
+  loadDatasetCategory(){
+    this.manageService.getAllCategory().subscribe(
+      (data) => {
+        this.datasetCategory = data.categories;
+      })
+  }
+  loadDatasetOrder(){
+    this.manageService.getAllOrders().subscribe(
+      (data) => {
+        this.datasetOrder = data.orders;
+      })
+  }
+  addProduct(){
+    $(`#addProductModal`).modal('show');
+  }
   async ngOnInit() {
     var self = this;
     this.authService.getProfile().subscribe(
@@ -142,22 +161,30 @@ export class DashboardComponent {
       (data) => {
         this.datasetProduct = data.products;
         $(document).ready(function () {
-          new DataTable('#example', {
+          new DataTable('#tableProduct', {
             autoWidth: false,
             responsive: true,
             destroy: true,
+            buttons: [
+                {
+                  text: 'Yeni',
+                  className: 'btn btn-success',
+                  attr:{'data-bs-toggle': 'modal',
+                  'data-bs-target': '#addProductModal'}
+              }
+            ],
             language: lang,
             columnDefs: [
-              { orderable: false, target: 0 },
+              { orderable: false, targets: 0 },
               { orderable: true,  className: 'reorder', targets: 1,  searchable: true,  responsivePriority: 7 },
               { orderable: true,  className: 'reorder', targets: 2,  searchable: true,  responsivePriority: 6 },
               { orderable: true,  className: 'reorder', targets: 3,  searchable: true },
               { orderable: true,  className: 'reorder', targets: 4,  searchable: true,  type: 'num',  responsivePriority: 5 },
               { orderable: true,  className: 'reorder', targets: 5,  searchable: true,  type: 'date-eu' },
               { orderable: true,  className: 'reorder', targets: 8,  searchable: true,  responsivePriority: 8 },
-              { orderable: false, searchable: false, targets: '_all' },
+              { orderable: false, searchable: false,    targets: '_all' },
             ],
-            dom: 'frtip',
+            dom: 'Bfrtip',
           });
         });
       },

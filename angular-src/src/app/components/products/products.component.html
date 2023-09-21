@@ -1,134 +1,33 @@
 <div class="d-block">
 
     <ul class="nav nav-pills mb-3 mt-3 justify-content-center" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
-                type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
-                type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</button>
+        <li class="nav-item" role="presentation" *ngFor="let data of datasetCategory">
+            <button *ngIf="data.valid == true" class="nav-link" [id]="'pills-'+data.name+'-tab'" data-bs-toggle="pill"
+                [attr.data-bs-target]="'#pills-'+data.name" type="button" role="tab" [attr.aria-controls]="'pills-'+data.name"
+                aria-selected="true">{{data.name}}</button>
         </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
-            tabindex="0">
+        <div class="tab-pane fade show active" [attr.name]="'pills-'+data.name" role="tabpanel" [attr.aria-labelledby]="'pills-'+data.name+'-tab'" tabindex="0" *ngFor="let data of datasetCategory">
             <section>
-
                 <div class="container py-5">
                     <div class="row">
-                        <div class="col-md-6 col-lg-4 mb-4 mb-md-3 mt-3 mb-3">
-                            <div class="card ms-auto me-auto" style="width: 18rem;">
-                                <img src="https://cdn.ye-mek.net/App_UI/Img/out/270/2022/04/hatay-kagit-kebabi-resimli-yemek-tarifi(16).jpg?w=270&h=202"
-                                    class="card-img-top" alt="...">
+                        <div class="col-md-6 col-lg-4 mb-4 mb-md-3 mt-3 mb-3" *ngFor="let prod of data.products">
+                            <div class="card ms-auto me-auto">
+                                <img src="{{prod.image}}" class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
+                                    <h5 class="card-title">{{prod.name}}</h5>
+                                    <p class="card-text">{{prod.description}}</p>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Süre     :</li>
-                                    <li class="list-group-item"><fa-icon [icon]="faTurkishLiraSign"></fa-icon>Fiyat    :</li>
+                                    <li class="list-group-item"><b>Süre : {{prod.time}}</b></li>
+                                    <li class="list-group-item"><b>Fiyat : {{prod.price}}₺</b></li>
                                 </ul>
-                                <div class="card-body text-center">
-                                    <a href="#" class="btn btn-danger bg-color-ys-red ms-auto me-auto">Satın al</a>
+                                <div class="card-body text-center" *ngIf="logged">
+                                    <button (click)="order( prod._id )" class="btn btn-danger bg-color-ys-red ms-auto me-auto">Satın al</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-4 mb-4 mb-md-3 mt-3 mb-3">
-                            <div class="card ms-auto me-auto" style="width: 18rem;">
-                                <img src="https://cdn.ye-mek.net/App_UI/Img/out/270/2022/04/tire-sis-kofte-resimli-yemek-tarifi(16).jpg?w=270&h=202"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Süre     :</li>
-                                    <li class="list-group-item"><fa-icon [icon]="faTurkishLiraSign"></fa-icon>Fiyat    :</li>
-                                </ul>
-                                <div class="card-body text-center">
-                                    <a href="#" class="btn btn-danger bg-color-ys-red ms-auto me-auto">Satın al</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4 mb-md-3 mt-3 mb-3">
-                            <div class="card ms-auto me-auto" style="width: 18rem;">
-                                <img src="https://cdn.ye-mek.net/App_UI/Img/out/270/2022/04/hatay-kagit-kebabi-resimli-yemek-tarifi(16).jpg?w=270&h=202"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Süre     :</li>
-                                    <li class="list-group-item"><fa-icon [icon]="faTurkishLiraSign"></fa-icon>Fiyat    :</li>
-                                </ul>
-                                <div class="card-body text-center">
-                                    <a href="#" class="btn btn-danger bg-color-ys-red ms-auto me-auto">Satın al</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4 mb-md-3 mt-3 mb-3">
-                            <div class="card ms-auto me-auto" style="width: 18rem;">
-                                <img src="https://cdn.ye-mek.net/App_UI/Img/out/270/2022/04/hatay-kagit-kebabi-resimli-yemek-tarifi(16).jpg?w=270&h=202"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Süre     :</li>
-                                    <li class="list-group-item"><fa-icon [icon]="faTurkishLiraSign"></fa-icon>Fiyat    :</li>
-                                </ul>
-                                <div class="card-body text-center">
-                                    <a href="#" class="btn btn-danger bg-color-ys-red ms-auto me-auto">Satın al</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4 mb-md-3 mt-3 mb-3">
-                            <div class="card ms-auto me-auto" style="width: 18rem;">
-                                <img src="https://cdn.ye-mek.net/App_UI/Img/out/270/2022/04/hatay-kagit-kebabi-resimli-yemek-tarifi(16).jpg?w=270&h=202"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Süre     :</li>
-                                    <li class="list-group-item"><fa-icon [icon]="faTurkishLiraSign"></fa-icon>Fiyat    :</li>
-                                </ul>
-                                <div class="card-body text-center">
-                                    <a href="#" class="btn btn-danger bg-color-ys-red ms-auto me-auto">Satın al</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4 mb-md-3 mt-3 mb-3">
-                            <div class="card ms-auto me-auto" style="width: 18rem;">
-                                <img src="https://cdn.ye-mek.net/App_UI/Img/out/270/2022/04/hatay-kagit-kebabi-resimli-yemek-tarifi(16).jpg?w=270&h=202"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Süre     :</li>
-                                    <li class="list-group-item">Fiyat    :</li>
-                                </ul>
-                                <div class="card-body text-center">
-                                    <a href="#" class="btn btn-danger bg-color-ys-red ms-auto me-auto">Satın al</a>
-                                </div>
-                            </div>
-                        </div>  
                     </div>
                 </div>
             </section>

@@ -127,4 +127,30 @@ export class ManageService {
       data, {headers: headers}
     );
   }
+
+  getProductsByCategory(data:any) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+    return this.http.post<httpResponse>(
+      'http://localhost:3000/dashboard/product/findByCategory',
+      data,{ headers: headers }
+    );
+  }
+
+  addOrder(id:any, data:any){
+    let  headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: this.authService.authToken
+        ? this.authService.authToken
+        : 'noauth',
+    })
+  
+    return this.http.post<httpResponse>(
+      'http://localhost:3000/dashboard/order/add',
+      data, {headers: headers}
+    );
+  }
 }

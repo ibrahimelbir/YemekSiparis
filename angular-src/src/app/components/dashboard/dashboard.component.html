@@ -13,15 +13,17 @@
             <button class="nav-link" id="order-tab" data-bs-toggle="tab" data-bs-target="#order-tab-pane"
                 type="button" role="tab" aria-controls="order-tab-pane" aria-selected="false">Sipariş Yönetimi</button>
         </li>
+        <!--
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member-tab-pane"
                 type="button" role="tab" aria-controls="member-tab-pane" aria-selected="false">Üye Yönetimi</button>
         </li>
+        -->
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="product-tab-pane" role="tabpanel" aria-labelledby="product-tab" tabindex="0">
-            Yemek
-            <table id="example" class="table table-striped" style="width:100%">
+            
+            <table id="tableProduct" class="table table-striped" style="width:100%">
                 <thead>
                     <tr>
                         <th></th>
@@ -51,7 +53,7 @@
             </table>
         </div>
         <div class="tab-pane fade" id="category-tab-pane" role="tabpanel" aria-labelledby="category-tab" tabindex="0">
-            Kategori
+            
             <table id="tableCategory" class="table table-striped" style="width:100%">
               <thead>
                   <tr>
@@ -74,7 +76,7 @@
           </table>
         </div>
         <div class="tab-pane fade" id="order-tab-pane" role="tabpanel" aria-labelledby="order-tab" tabindex="0">
-            Sipariş
+            
             <table id="tableOrder" class="table table-striped" style="width:100%">
               <thead>
                   <tr>
@@ -98,9 +100,11 @@
               </tbody>
           </table>
         </div>
+        <!--
         <div class="tab-pane fade" id="member-tab-pane" role="tabpanel" aria-labelledby="member-tab" tabindex="0">
             Üye
         </div>
+        -->
     </div>
 </div>
 
@@ -119,10 +123,22 @@
               <input type="text" class="form-control" [(ngModel)] ="data['name']" name="floatingInputProductName">
               <label class="fw-bold">Yemek Adı</label>
             </div>
+
+            <div class="form-floating">
+              <select class="form-select" name="floatingInputProductCategory" aria-label="Floating label select example">
+                <option [value]="data['category']">{{data['category']}}</option>
+                <option *ngFor="let cat of datasetCategory"  [value]="cat.name">{{cat.name}}</option>
+              </select>
+              <label>Kategori</label>
+            </div>
+            
+            <!-- 
             <div class="form-floating mt-2 mb-2">
               <input type="text" class="form-control" [(ngModel)] ="data['category']" name="floatingInputProductCategory">
               <label class="fw-bold">Kategori</label>
-            </div>
+            </div> -->
+
+
             <div class="form-floating mt-2 mb-2">
               <input type="text" class="form-control" [(ngModel)] ="data['description']" name="floatingInputProductDescription" >
               <label class="fw-bold">Açıklama</label>
@@ -165,10 +181,15 @@
               <input type="text" class="form-control" [(ngModel)] ="data['name']" name="floatingInputCategoryName">
               <label class="fw-bold">Kategori Adı</label>
             </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" name="floatingInputCategoryValid" [(ngModel)] = "data['valid']">
+              <label class="form-check-label">Aktiflik Durumu</label>
+            </div>
+<!--             
             <div class="form-floating mt-2 mb-2">
               <input type="text" class="form-control" [(ngModel)] ="data['valid']" name="floatingInputCategoryValid">
               <label class="fw-bold">Aktiflik Durumu</label>
-            </div>          
+            </div>           -->
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -195,6 +216,59 @@
               <input type="text" class="form-control" [(ngModel)] ="data['status']" name="floatingInputOrderStatus">
               <label class="fw-bold">Sipariş Durumu</label>
             </div>          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            <button type="submit" class="btn btn-success">Kaydet</button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="addProductModal" tabindex="-1"  aria-labelledby="#addProductModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <form id="addProductForm" (submit)="addProduct()">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editProductModalLabel">Yeni Ürün Ekle</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+          <div class="modal-body">
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control"  name="floatingInputProductName">
+              <label class="fw-bold">Yemek Adı</label>
+            </div>
+
+            <div class="form-floating">
+              <select class="form-select" name="floatingInputProductCategory" aria-label="Floating label select example">
+                <option *ngFor="let cat of datasetCategory"  [value]="cat.id">{{cat.name}}</option>
+              </select>
+              <label>Kategori</label>
+            </div>
+            
+
+
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control"  name="floatingInputProductDescription" >
+              <label class="fw-bold">Açıklama</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control" name="floatingInputProductPrice" >
+              <label class="fw-bold">Fiyat</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control"  name="floatingInputProductTime">
+              <label class="fw-bold">Süre</label>
+            </div>
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control"  name="floatingInputProductImage">
+              <label class="fw-bold">Resim</label>
+            </div>
+          
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>

@@ -100,4 +100,8 @@ export class AuthService {
     let data = JSON.parse(localStorage.getItem('user') || '{"admin": false}')
     return data.admin;
   }
+  getUserData(){
+    let data = JSON.parse(localStorage.getItem('user') || '{}')
+    return data;
+  }
 }

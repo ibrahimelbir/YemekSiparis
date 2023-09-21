@@ -20,6 +20,7 @@ import { FontAwesomeModule, FaIconLibrary, FaDuotoneIconComponent } from '@forta
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 
+import { ObjectToArrayPipe } from './pipes/objectToArray';
 import { ProductsComponent } from './components/products/products.component';
 import { faStarOfLife } from '@fortawesome/free-solid-svg-icons';
 
@@ -45,6 +46,7 @@ const appRoutes : Routes = [
     ProfileComponent,
     DashboardComponent,
     ProductsComponent,
+    ObjectToArrayPipe
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,7 @@ const appRoutes : Routes = [
     })
   ],
   exports: [RouterModule],
-  providers: [ValidateService, AuthService, AuthGuard, AdminGuard],
+  providers: [ValidateService, AuthService, AuthGuard, AdminGuard, ObjectToArrayPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {

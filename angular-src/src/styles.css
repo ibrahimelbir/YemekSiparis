@@ -57,3 +57,10 @@ body{
     background-size:    50%;
     
 }
+
+
+
+.dt-buttons{
+    position: absolute;
+    z-index: 415;
+}
