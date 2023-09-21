@@ -80,7 +80,22 @@ export class ManageService {
       })
     
     return this.http.post<httpResponse>(
-      'http://localhost:3000/dashboard/user',
+      'http://localhost:3000/dashboard/user/getByID',
+      {id:id}, {headers: headers}
+    );
+  }
+
+  getCategory(id: any) {
+    let  headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: this.authService.authToken
+          ? this.authService.authToken
+          : 'noauth',
+      })
+    
+    return this.http.post<httpResponse>(
+      'http://localhost:3000/dashboard/category/getByID',
       {id:id}, {headers: headers}
     );
   }
@@ -97,7 +112,18 @@ export class ManageService {
       'http://localhost:3000/dashboard/order/list',{},{headers:headers}
     );  
   }
-  
+  getAllUsers() {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: this.authService.authToken
+        ? this.authService.authToken
+        : 'noauth',
+    });
+    return this.http.get<httpResponse>(
+      'http://localhost:3000/dashboard/user/list',{headers:headers}
+    );  
+  }
   editCategory(id: any, data:any) {
     let  headers = new HttpHeaders({
         'Content-Type': 'application/json',
@@ -150,6 +176,35 @@ export class ManageService {
   
     return this.http.post<httpResponse>(
       'http://localhost:3000/dashboard/order/add',
+      data, {headers: headers}
+    );
+  }
+
+  addProduct(data:any){
+    let  headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: this.authService.authToken
+        ? this.authService.authToken
+        : 'noauth',
+    })
+  
+    return this.http.post<httpResponse>(
+      'http://localhost:3000/dashboard/product/add',
+      data, {headers: headers}
+    );
+  }
+  addCategory(data:any){
+    let  headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: this.authService.authToken
+        ? this.authService.authToken
+        : 'noauth',
+    })
+  
+    return this.http.post<httpResponse>(
+      'http://localhost:3000/dashboard/category/add',
       data, {headers: headers}
     );
   }

@@ -17,6 +17,8 @@ const lang = require('datatables.net/tr.json');
 import { ManageService } from 'src/app/services/manage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { from } from 'rxjs';
+import { FlashService } from 'simple-flash-message';
+import { ValidateService } from 'src/app/services/validate.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +31,7 @@ export class DashboardComponent {
   datasetProduct: any[] = [];
   datasetCategory: any[] = [];
   datasetOrder: any[] = [];
+  datasetUser: any[] = [];
   id: any;
 
   constructor(
@@ -36,7 +39,9 @@ export class DashboardComponent {
     private router: Router,
     private manageService: ManageService,
     private formBuilder: FormBuilder,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private flashMessage: FlashService,
+    private validateService: ValidateService
   ) {}
   onEditProductSubmit(id: any) {
     let name = $(`#editProductForm_${id}`)
@@ -142,9 +147,76 @@ export class DashboardComponent {
         this.datasetOrder = data.orders;
       })
   }
+
+
   addProduct(){
-    $(`#addProductModal`).modal('show');
+      let name = $(`#addProductForm`)
+        .find("[name='addProductName']")
+        .val();
+      let category = $(`#addProductForm`)
+        .find("[name='addProductCategory']")
+        .val();
+      let description = $(`#addProductForm`)
+        .find("[name='addProductDescription']")
+        .val();
+      let price = $(`#addProductForm`)
+        .find("[name='addProductPrice']")
+        .val();
+      let time = $(`#addProductForm`)
+        .find("[name='addProductTime']")
+        .val();
+
+      let data = {
+        name: name,
+        category: category,
+        description: description,
+        price: price,
+        time: time
+      }
+      if(!this.validateService.validateProduct(data)){
+        console.log(data)
+        return this.flashMessage.showFlash("error", "Kontrol Hatası", "Tüm alanlar doldurulmalıdır.")
+      }
+      this.manageService.addProduct(data).subscribe((res) => {
+        if(!res.success)
+          return this.flashMessage.showFlash("error", "Kaydetme Hatası", "Tüm alanlar eksiksiz ve doğru bir şekilde doldurulmalıdır!")
+
+        return this.flashMessage.showFlash("success", "Başarılı", "Ürün başarıyla kaydedildi.")
+      },
+      (err) =>{
+        console.error(err)
+        return this.flashMessage.showFlash("error", "Kaydetme Hatası", "Bir hata meydana geldi!")
+
+      })
   }
+
+
+  addCategory(){
+    let name = $(`#addCategoryForm`)
+      .find("[name='addCategoryName']")
+      .val();
+    let data = {
+      name: name
+    }
+    if(!this.validateService.validateCategory(data)){
+      console.error(data)
+      return this.flashMessage.showFlash("error", "Kontrol Hatası", "Tüm alanlar doldurulmalıdır.")
+    }
+    this.manageService.addCategory(data).subscribe((res) => {
+      if(!res.success)
+        return this.flashMessage.showFlash("error", "Kaydetme Hatası", "üm alanlar eksiksiz ve doğru bir şekilde doldurulmalıdır!")
+
+      return this.flashMessage.showFlash("success", "Başarılı", "Kategori başarıyla kaydedildi.")
+    },
+    (err) =>{
+      console.error(err)
+      return this.flashMessage.showFlash("error", "Kaydetme Hatası", "Bir hata meydana geldi!")
+
+    })
+  }
+
+  
+
   async ngOnInit() {
     var self = this;
     this.authService.getProfile().subscribe(
@@ -160,6 +232,15 @@ export class DashboardComponent {
     await this.manageService.getAllProduct().subscribe(
       (data) => {
         this.datasetProduct = data.products;
+        this.datasetProduct.forEach(k => {
+          let con = this.manageService.getCategory(k['category']).subscribe((res) =>{
+            if(res.success && res.categories != null){
+              console.log(k['name'],res)
+              k['categoryEdited'] = `${res.categories.name}`;
+            }
+            con.unsubscribe();
+          })
+        })
         $(document).ready(function () {
           new DataTable('#tableProduct', {
             autoWidth: false,
@@ -167,7 +248,7 @@ export class DashboardComponent {
             destroy: true,
             buttons: [
                 {
-                  text: 'Yeni',
+                  text: 'Yeni Ürün',
                   className: 'btn btn-success',
                   attr:{'data-bs-toggle': 'modal',
                   'data-bs-target': '#addProductModal'}
@@ -218,14 +299,17 @@ export class DashboardComponent {
         );
       }
     });
-
+    await this.manageService.getAllUsers().subscribe((data) =>{
+      this.datasetUser = data.users;
+    })
     
     await this.manageService.getAllCategory().subscribe(
       (data) => {
         this.datasetCategory = data.categories;
         this.datasetCategory.forEach(k => {
-          this.manageService.getUser(k['addedby']).subscribe((res) => {
-            k['addedby'] = `${res.users.email} (${res.users._id})`
+          let con = this.manageService.getUser(k['addedby']).subscribe((res) => {
+            k['addedbyEdited'] = `${res.users.email} (${res.users._id})`;
+            con.unsubscribe();
           })
         })
         $(document).ready(function () {
@@ -233,6 +317,14 @@ export class DashboardComponent {
             autoWidth: false,
             responsive: true,
             destroy: true,
+            buttons: [
+              {
+                text: 'Yeni Kategori',
+                className: 'btn btn-success',
+                attr:{'data-bs-toggle': 'modal',
+                'data-bs-target': '#addCategoryModal'}
+            }
+          ],
             language: lang,
             columnDefs: [
               { orderable: true,  className: 'reorder', targets: 0,  searchable: true},
@@ -240,7 +332,7 @@ export class DashboardComponent {
               { orderable: true,  className: 'reorder', targets: 2,  searchable: true,  type: 'date-eu' },
               { orderable: false, searchable: false, targets: '_all' },
             ],
-            dom: 'frtip',
+            dom: 'Bfrtip',
           });
         });
       },

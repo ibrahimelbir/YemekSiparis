@@ -50,6 +50,8 @@ export class ProductsComponent {
           this.manageService.getProductsByCategory({category : catrow.name}).subscribe((data2)=>{
             this.datasetCategory.find(k => k.name == catrow.name)['products'] = data2.products;
             $('ul#pills-tab li:first').children().first().addClass('active')
+            $('ul#pills-tab li:first').children().first().addClass('active')
+            $('#pills-tabContent').children().first().addClass('show active')
             cato.unsubscribe();
           })
         }

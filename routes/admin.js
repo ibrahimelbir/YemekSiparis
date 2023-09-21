@@ -20,6 +20,23 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res, next)
 
 
 // Product
+router.post('/product/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    let newProduct = new Product({
+        name        : req.body.name,
+        description : req.body.description,
+        price       : req.body.price,
+        category    : req.body.category,
+        time        : req.body.time,
+        image       : req.body.image,
+        addedby     : req.user.id
+    });
+    newProduct.save()
+    
+            .then((products)=> {res.json({success: true, msg : 'Product added.', products: products})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to add product.', err: err})});
+    
+})
+
 router.post('/product/edit', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     let edited = {
         name        : req.body.name,
@@ -31,19 +48,19 @@ router.post('/product/edit', passport.authenticate('jwt', {session: false}), (re
     };
     Product.findByIdAndUpdate(req.body.id, edited)
     
-            .then((product)=> {res.json({success: true, msg : 'Product edited.', product: product})})
-            .catch((err) => {res.json({success: false, msg : 'Failed to add product.', err: err})});
+            .then((products)=> {res.json({success: true, msg : 'Product edited.', products: products})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to edit product.', err: err})});
     
 })
 
 router.delete('/product/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     console.log(req.body.id)
     Product.deleteOne({ _id : req.body.id })
-        .then((product)=> {
-            if (product.deletedCount > 0){
-                res.json({success: true, msg : 'Product deleted.', product: product})
+        .then((products)=> {
+            if (products.deletedCount > 0){
+                res.json({success: true, msg : 'Product deleted.', products: products})
             }else{
-                res.json({success: false, msg : "Couldn't find product.", product: product})
+                res.json({success: false, msg : "Couldn't find product.", products: products})
             }
         })
         .catch((err) => {res.json({success: false, msg : 'Failed to delete product.', err: err})});
@@ -61,7 +78,7 @@ router.get('/product/list',  (req, res, next) => {
 router.post('/category/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     let newCategory = new Category({
         name        : req.body.name,
-        valid       : req.body.valid,
+        valid       : true,
         addedby     : req.user.id
     });
     newCategory.save()
@@ -110,18 +127,23 @@ router.get('/category/list',  (req, res, next) => {
 
 // User
 router.get('/user/list', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    
     User.find({})
-            .then((categories)=> {res.json({success: true, msg : 'Categories listed.', categories: categories})})
+            .then((users)=> {res.json({success: true, msg : 'Users listed.', users: users})})
             .catch((err) => {res.json({success: false, msg : 'Failed to add category.', err: err})});
     
 })
 
-router.post('/user', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    console.log(req.body.id)
+router.post('/user/getByID', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     User.findById(req.body.id)
             .then((users)=> {res.json({success: true, msg : 'User found.', users: users})})
             .catch((err) => {res.json({success: false, msg : 'Failed to find user.', err: err})});
+    
+})
+
+router.post('/category/getByID', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    Category.findById(req.body.id)
+            .then((categories)=> {res.json({success: true, msg : 'Category found.', categories: categories})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find category.', err: err})});
     
 })
 

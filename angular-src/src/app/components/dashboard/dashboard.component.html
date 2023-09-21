@@ -41,7 +41,7 @@
                     <tr *ngFor="let data of datasetProduct">
                         <td>{{data['image']}}</td>
                         <td>{{data['name']}}</td>
-                        <td>{{data['category']}}</td>
+                        <td>{{data['categoryEdited'] ? data['categoryEdited'] : data['category']}}</td>
                         <td style="white-space: break-spaces;">{{data['description']}}</td>
                         <td>{{data['price']}}</td>
                         <td>{{data['joindate'] | date:'dd/MM/yyyy' }}</td>
@@ -69,7 +69,7 @@
                       <td>{{data['name']}}</td>
                       <td>{{data['valid']}}</td>
                       <td>{{data['createdate'] | date:'dd/MM/yyyy' }}</td>
-                      <td>{{data['addedby']}}</td>
+                      <td>{{data['addedbyEdited']}}</td>
                       <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editCategoryModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
                   </tr>
               </tbody>
@@ -126,8 +126,8 @@
 
             <div class="form-floating">
               <select class="form-select" name="floatingInputProductCategory" aria-label="Floating label select example">
-                <option [value]="data['category']">{{data['category']}}</option>
-                <option *ngFor="let cat of datasetCategory"  [value]="cat.name">{{cat.name}}</option>
+                <option *ngFor="let cat of datasetCategory"     [attr.selected]="data['category'] == cat.name ? true : null"     [value]="cat.name">{{cat.name}}</option>
+                
               </select>
               <label>Kategori</label>
             </div>
@@ -185,6 +185,7 @@
               <input class="form-check-input" type="checkbox" role="switch" name="floatingInputCategoryValid" [(ngModel)] = "data['valid']">
               <label class="form-check-label">Aktiflik Durumu</label>
             </div>
+            
 <!--             
             <div class="form-floating mt-2 mb-2">
               <input type="text" class="form-control" [(ngModel)] ="data['valid']" name="floatingInputCategoryValid">
@@ -217,6 +218,13 @@
               <label class="fw-bold">Sipariş Durumu</label>
             </div>          
           </div>
+          <div class="form-floating">
+            <select class="form-select" name="floatingInputOrderStatus" aria-label="Floating label select example">
+              <option [value]="data['category']">{{data['category']}}</option>
+              <option *ngFor="let cat of datasetCategory"  [value]="cat.name">{{cat.name}}</option>
+            </select>
+            <label>Sipariş Durumu</label>
+          </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
             <button type="submit" class="btn btn-success">Kaydet</button>
@@ -239,13 +247,13 @@
         
           <div class="modal-body">
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control"  name="floatingInputProductName">
+              <input type="text" class="form-control"  name="addProductName">
               <label class="fw-bold">Yemek Adı</label>
             </div>
 
             <div class="form-floating">
-              <select class="form-select" name="floatingInputProductCategory" aria-label="Floating label select example">
-                <option *ngFor="let cat of datasetCategory"  [value]="cat.id">{{cat.name}}</option>
+              <select class="form-select" name="addProductCategory" aria-label="Floating label select example">
+                <option *ngFor="let cat of datasetCategory"  [value]="cat._id">{{cat.name}}</option>
               </select>
               <label>Kategori</label>
             </div>
@@ -253,20 +261,47 @@
 
 
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control"  name="floatingInputProductDescription" >
+              <input type="text" class="form-control"  name="addProductDescription" >
               <label class="fw-bold">Açıklama</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control" name="floatingInputProductPrice" >
+              <input type="text" class="form-control" name="addProductPrice" >
               <label class="fw-bold">Fiyat</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control"  name="floatingInputProductTime">
+              <input type="text" class="form-control"  name="addProductTime">
               <label class="fw-bold">Süre</label>
             </div>
             <div class="form-floating mt-2 mb-2">
-              <input type="text" class="form-control"  name="floatingInputProductImage">
+              <input type="text" class="form-control"  name="addProductImage">
               <label class="fw-bold">Resim</label>
+            </div>
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            <button type="submit" class="btn btn-success">Kaydet</button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="addCategoryModal" tabindex="-1"  aria-labelledby="#addCategoryModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <form id="addCategoryForm" (submit)="addCategory()">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editProductModalLabel">Yeni Ürün Ekle</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+          <div class="modal-body">
+            <div class="form-floating mt-2 mb-2">
+              <input type="text" class="form-control"  name="addCategoryName">
+              <label class="fw-bold">Kategori Adı</label>
             </div>
           
           </div>
