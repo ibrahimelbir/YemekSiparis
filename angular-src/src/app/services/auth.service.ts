@@ -43,8 +43,9 @@ export class AuthService {
       Accept: 'application/json',
       Authorization: this.authToken ? this.authToken : 'noauth',
     });
+    console.log(headers.get('Authorization'))
 
-    return this.http.get<httpResponse>('http://localhost:3000/profile', {
+    return this.http.get<httpResponse>('http://localhost:3000/profiles', {
       headers: headers,
     });
   }
@@ -80,7 +81,7 @@ export class AuthService {
       Authorization: this.authToken ? this.authToken : 'noauth',
     });
     return this.http
-      .get<boolean>('http://localhost:3000/dashboard', { headers: headers })
+      .get<boolean>('http://localhost:3000/dashboard/in', { headers: headers })
       .pipe(
         map((res: boolean) => {
           return res;
@@ -104,4 +105,5 @@ export class AuthService {
     let data = JSON.parse(localStorage.getItem('user') || '{}')
     return data;
   }
+  
 }

@@ -1,8 +1,42 @@
-<p>profile works!</p>
-<div *ngIf="user">
-    <h2 class="page-header">{{user.name}} {{user.surname}} </h2>
-    <ul class="list-group">
-        <li class="list-group-item">Email: {{user.email}}</li>
-        <li class="list-group-item">Birthdate: {{user.birthdate}}</li>
-    </ul>
+<div class="container mt-5">
+    <div class="row"><div *ngIf="user">
+        <ul class="list-group mt-5">
+            <li class="list-group-item">
+                <b class="label">Ad Soyad</b> {{user.name}} {{user.surname}}
+            </li>
+            <li class="list-group-item">
+                <b class="label">Email</b> {{user.email}}
+            </li>
+            <li class="list-group-item">
+                <b class="label">Doğum günü</b> {{user.birthdate | date:'dd.mm.YYYY'}}
+            </li>
+            <li class="list-group-item">
+                <b class="label">Adres</b> {{user.adress}}
+            </li>
+            <li class="list-group-item">
+                <b class="label">Kayıt Tarihi</b> {{user.registerdate | date:'dd.mm.YYYY'}}
+            </li>
+            
+        </ul>
+    </div>
 </div>
+<div class="row tablerow mt-5 p-3">
+    <table id="tableOrder" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Ürün</th>
+                <th>Sipariş Tarihi</th>
+                <th>Durum</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            <tr *ngFor="let data of orderList">
+                <td>{{data['productEdited']? data['productEdited']: data['product']}}</td>
+                <td>{{data['orderdate'] | date:'dd.MM.yyyy' }}</td>
+                <td>{{orderStatus[data['status']].msg}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+

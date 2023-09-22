@@ -13,14 +13,15 @@ const Category = require('../models/category')
 const Order = require('../models/order')
 
 // Dashboard
-router.get('/', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    console.log(1);
+router.get('/in', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     res.json(req.user.admin);
 })
 
 
 // Product
 router.post('/product/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
     let newProduct = new Product({
         name        : req.body.name,
         description : req.body.description,
@@ -38,6 +39,8 @@ router.post('/product/add', passport.authenticate('jwt', {session: false}), (req
 })
 
 router.post('/product/edit', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
     let edited = {
         name        : req.body.name,
         description : req.body.description,
@@ -54,7 +57,8 @@ router.post('/product/edit', passport.authenticate('jwt', {session: false}), (re
 })
 
 router.delete('/product/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    console.log(req.body.id)
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
     Product.deleteOne({ _id : req.body.id })
         .then((products)=> {
             if (products.deletedCount > 0){
@@ -74,8 +78,29 @@ router.get('/product/list',  (req, res, next) => {
     
 })
 
+router.post('/product/getByID', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    Product.findById(req.body.id)
+            .then((products)=> {res.json({success: true, msg : 'Product found.', products: products})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find product.', err: err})});
+    
+})
+
+
+router.post('/product/findByCategory', (req, res, next) => {
+    
+    Product.find({category: req.body.category})
+    
+            .then((products)=> {res.json({success: true, msg : 'Products that belongs to '+ req.body.category +' list.', products: products})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find products.', err: err})});
+    
+})
+
+
 // Category
+
 router.post('/category/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
     let newCategory = new Category({
         name        : req.body.name,
         valid       : true,
@@ -88,6 +113,8 @@ router.post('/category/add', passport.authenticate('jwt', {session: false}), (re
     
 })
 router.post('/category/edit', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
     let edited = {
         name        : req.body.name,
         valid       : req.body.valid,
@@ -100,6 +127,8 @@ router.post('/category/edit', passport.authenticate('jwt', {session: false}), (r
 })
 
 router.delete('/category/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
     Category.deleteOne({ _id : req.body.id })
         .then((categories)=> {
             if (product.deletedCount > 0){
@@ -124,6 +153,13 @@ router.get('/category/list',  (req, res, next) => {
     
 })
 
+router.post('/category/getByID', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    Category.findById(req.body.id)
+            .then((categories)=> {res.json({success: true, msg : 'Category found.', categories: categories})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find category.', err: err})});
+    
+})
+
 
 // User
 router.get('/user/list', passport.authenticate('jwt', {session: false}), (req, res, next) => {
@@ -140,12 +176,7 @@ router.post('/user/getByID', passport.authenticate('jwt', {session: false}), (re
     
 })
 
-router.post('/category/getByID', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    Category.findById(req.body.id)
-            .then((categories)=> {res.json({success: true, msg : 'Category found.', categories: categories})})
-            .catch((err) => {res.json({success: false, msg : 'Failed to find category.', err: err})});
-    
-})
+
 
 // Order
 
@@ -164,15 +195,24 @@ router.post('/order/add', passport.authenticate('jwt', {session: false}), (req, 
 })
 
 router.delete('/order/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    Order.deleteById(req.body.id).save()
-            .then((orders)=> {res.json({success: true, msg : 'Order deleted.', orders: orders})})
-            .catch((err) => {res.json({success: false, msg : 'Failed to delete order.', err: err})});
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
+    Order.deleteOne({_id :req.body.id})
+        .then((orders)=> {
+            if (orders.deletedCount > 0){
+                res.json({success: true, msg : 'Order deleted.', orders: orders})
+            }else{
+                res.json({success: false, msg : "Couldn't find order.", orders: orders})
+            }
+        })
+        .catch((err) => {res.json({success: false, msg : 'Failed to delete order.', err: err})});
     
 })
 
-router.post('/order', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    
-    
+router.post('/order/getByID', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.'});
+
     Order.findById(req.body.id)
             .then((orders)=> {res.json({success: true, msg : 'Order found.', orders: orders})})
             .catch((err) => {res.json({success: false, msg : 'Failed to find order.', err: err})});
@@ -189,6 +229,8 @@ router.post('/order/list', passport.authenticate('jwt', {session: false}), (req,
 })
 
 router.post('/order/edit', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    if(!req.user.admin)
+        return res.json({success: false, msg : 'Unauthorized.', err: err});
     let edited = {
         status       : req.body.status,
     };
@@ -199,12 +241,14 @@ router.post('/order/edit', passport.authenticate('jwt', {session: false}), (req,
     
 })
 
-router.post('/product/findByCategory', (req, res, next) => {
+
+
+router.get('/order/findByUser',passport.authenticate('jwt', {session: false}), (req, res, next) => {
     
-    Product.find({category: req.body.category})
+    Order.find({customer: req.user._id})
     
-            .then((products)=> {res.json({success: true, msg : 'Products that belongs to '+ req.body.category +' list.', products: products})})
-            .catch((err) => {res.json({success: false, msg : 'Failed to find products.', err: err})});
+            .then((orders)=> {res.json({success: true, msg : 'Orders that belongs to '+ req.body.id +' list.', orders: orders})})
+            .catch((err) => {res.json({success: false, msg : 'Failed to find orders.', err: err})});
     
 })
 

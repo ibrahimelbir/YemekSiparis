@@ -65,3 +65,9 @@
 }
 
 .card-text{height: 50px;}
+
+.card-img-top{
+  height: 200px;
+  object-position: center;
+        object-fit: cover;
+}

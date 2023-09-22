@@ -39,15 +39,15 @@
                 </thead>
                 <tbody id="tbody">
                     <tr *ngFor="let data of datasetProduct">
-                        <td>{{data['image']}}</td>
+                        <td><img src="{{data['image']}}" style="width:40px; height:40px"></td>
                         <td>{{data['name']}}</td>
                         <td>{{data['categoryEdited'] ? data['categoryEdited'] : data['category']}}</td>
                         <td style="white-space: break-spaces;">{{data['description']}}</td>
                         <td>{{data['price']}}</td>
-                        <td>{{data['joindate'] | date:'dd/MM/yyyy' }}</td>
+                        <td>{{data['joindate'] | date:'dd.MM.yyyy' }}</td>
                         <td>{{data['addedby']}}</td>
                         <td>{{data['time']}}</td>
-                        <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editProductModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                        <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'deleteProduct_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editProductModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
                     </tr>
                 </tbody>
             </table>
@@ -68,9 +68,9 @@
                   <tr *ngFor="let data of datasetCategory">
                       <td>{{data['name']}}</td>
                       <td>{{data['valid']}}</td>
-                      <td>{{data['createdate'] | date:'dd/MM/yyyy' }}</td>
-                      <td>{{data['addedbyEdited']}}</td>
-                      <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editCategoryModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                      <td>{{data['createdate'] | date:'dd.MM.yyyy' }}</td>
+                      <td>{{data['addedbyEdited'] ? data['addedbyEdited'] : data['addedby']}}</td>
+                      <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'deleteCategory_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editCategoryModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
                   </tr>
               </tbody>
           </table>
@@ -90,12 +90,12 @@
               </thead>
               <tbody id="tbody">
                   <tr *ngFor="let data of datasetOrder">
-                      <td>{{data['product']}}</td>
-                      <td>{{data['customer']}}</td>
+                      <td>{{data['productEdited']? data['productEdited']: data['product']}}</td>
+                      <td>{{data['customerEdited'] ? data['customerEdited'] : data['customer']}}</td>
                       <td>{{data['note']}}</td>
                       <td>{{data['orderdate'] | date:'dd.MM.yyyy' }}</td>
-                      <td>{{data['status']}}</td>
-                      <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'delete_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editOrderModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                      <td>{{orderStatus[data['status']].msg}}</td>
+                      <td style=" width:100px !important"><button type="button" class="btn btn-danger btn-action" [value]="'deleteOrder_' + data['_id']"><i class="fa-solid fa-trash"></i></button><button type="button" class="btn btn-warning btn-action ms-1" [value]="'edit_' + data['_id']"  data-bs-toggle="modal" [attr.data-bs-target]="'#editOrderModal_' + data['_id']"><i class="fa-solid fa-pen-to-square"></i></button></td>
                   </tr>
               </tbody>
           </table>
@@ -125,8 +125,8 @@
             </div>
 
             <div class="form-floating">
-              <select class="form-select" name="floatingInputProductCategory" aria-label="Floating label select example">
-                <option *ngFor="let cat of datasetCategory"     [attr.selected]="data['category'] == cat.name ? true : null"     [value]="cat.name">{{cat.name}}</option>
+              <select class="form-select" [(ngModel)] ="data['category']" name="floatingInputProductCategory" aria-label="Floating label select example">
+                <option *ngFor="let cat of datasetCategory"     [attr.selected]="data['category'] == cat.name ? true : null"     [value]="cat._id">{{cat.name}}</option>
                 
               </select>
               <label>Kategori</label>
@@ -213,18 +213,20 @@
         </div>
         
           <div class="modal-body">
-            <div class="form-floating mt-2 mb-2">
+            <!-- <div class="form-floating mt-2 mb-2">
               <input type="text" class="form-control" [(ngModel)] ="data['status']" name="floatingInputOrderStatus">
               <label class="fw-bold">Sipariş Durumu</label>
-            </div>          
+            </div> -->
+            <div class="form-floating">
+              <select class="form-select" [(ngModel)] ="data['status']" name="floatingInputOrderStatus" aria-label="Floating label select example">
+                <option *ngFor="let kv of orderStatus" [attr.selected]="data['status'] == kv.val ? true : null" [value]="kv.val">{{kv.msg}}</option>
+              </select>
+              <label>Sipariş Durumu</label>
+            </div>      
           </div>
-          <div class="form-floating">
-            <select class="form-select" name="floatingInputOrderStatus" aria-label="Floating label select example">
-              <option [value]="data['category']">{{data['category']}}</option>
-              <option *ngFor="let cat of datasetCategory"  [value]="cat.name">{{cat.name}}</option>
-            </select>
-            <label>Sipariş Durumu</label>
-          </div>
+          
+          
+          
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
             <button type="submit" class="btn btn-success">Kaydet</button>

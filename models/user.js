@@ -47,12 +47,6 @@ const userSchema = mongoose.Schema({
         required : true
     },
 
-    orders: {
-        type: Array,
-        default : [],
-        required: true
-    }
-
 })
 
 const User = module.exports = mongoose.model('User', userSchema);

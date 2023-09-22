@@ -64,7 +64,7 @@ router.post('/register', (req, res, next) => {
     
 })
 
-router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.get('/profiles', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     res.json({user: req.user})
 })
 

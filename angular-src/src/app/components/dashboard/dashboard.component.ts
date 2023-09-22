@@ -16,7 +16,7 @@ const lang = require('datatables.net/tr.json');
 
 import { ManageService } from 'src/app/services/manage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { from } from 'rxjs';
+import { from, lastValueFrom } from 'rxjs';
 import { FlashService } from 'simple-flash-message';
 import { ValidateService } from 'src/app/services/validate.service';
 
@@ -33,6 +33,29 @@ export class DashboardComponent {
   datasetOrder: any[] = [];
   datasetUser: any[] = [];
   id: any;
+  tableProduct:any;
+  tableCategory:any;
+  tableOrder:any;
+  orderStatus:any[] = [
+    {
+      val : 0,
+      msg : "Sipariş alındı."
+    },
+    {
+      val : 1,
+      msg : "Sipariş hazırlanıyor."
+    },
+    {
+      val : 2,
+      msg : "Sipariş yola çıktı."
+    },
+    {
+      val : 3,
+      msg : "Sipariş teslim edildi."
+    }
+    
+    
+  ];
 
   constructor(
     private authService: AuthService,
@@ -72,10 +95,8 @@ export class DashboardComponent {
       time        : time,
       image       : image,
     };
-    console.log(data)
     this.manageService.editProduct(id, data).subscribe(
       (res) => {
-        console.log(res);
         $(`#editProductModal_${id}`).modal('hide');
       },
       (err) => {
@@ -90,17 +111,15 @@ export class DashboardComponent {
       .val();
     let valid = $(`#editCategoryForm_${id}`)
       .find("[name='floatingInputCategoryValid']")
-      .val();
+      .is(":checked");
 
     const data = {
       id          : id,
       name        : name,
       valid       : valid
     };
-
     this.manageService.editCategory(id, data).subscribe(
       (res) => {
-        console.log(res);
         $(`#editCategoryModal_${id}`).modal('hide');
       },
       (err) => {
@@ -121,7 +140,6 @@ export class DashboardComponent {
 
     this.manageService.editOrder(id, data).subscribe(
       (res) => {
-        console.log(res);
         $(`#editOrderModal_${id}`).modal('hide');
       },
       (err) => {
@@ -165,23 +183,29 @@ export class DashboardComponent {
       let time = $(`#addProductForm`)
         .find("[name='addProductTime']")
         .val();
+      let image = $(`#addProductForm`)
+        .find("[name='addProductImage']")
+        .val();
+
 
       let data = {
         name: name,
         category: category,
         description: description,
         price: price,
-        time: time
+        time: time,
+        image: image
       }
       if(!this.validateService.validateProduct(data)){
-        console.log(data)
         return this.flashMessage.showFlash("error", "Kontrol Hatası", "Tüm alanlar doldurulmalıdır.")
       }
       this.manageService.addProduct(data).subscribe((res) => {
         if(!res.success)
           return this.flashMessage.showFlash("error", "Kaydetme Hatası", "Tüm alanlar eksiksiz ve doğru bir şekilde doldurulmalıdır!")
 
+        $(`#addProductModal`).modal('hide');
         return this.flashMessage.showFlash("success", "Başarılı", "Ürün başarıyla kaydedildi.")
+
       },
       (err) =>{
         console.error(err)
@@ -199,13 +223,13 @@ export class DashboardComponent {
       name: name
     }
     if(!this.validateService.validateCategory(data)){
-      console.error(data)
       return this.flashMessage.showFlash("error", "Kontrol Hatası", "Tüm alanlar doldurulmalıdır.")
     }
     this.manageService.addCategory(data).subscribe((res) => {
       if(!res.success)
         return this.flashMessage.showFlash("error", "Kaydetme Hatası", "üm alanlar eksiksiz ve doğru bir şekilde doldurulmalıdır!")
-
+      
+      $(`#addCategoryModal`).modal('hide');
       return this.flashMessage.showFlash("success", "Başarılı", "Kategori başarıyla kaydedildi.")
     },
     (err) =>{
@@ -227,22 +251,19 @@ export class DashboardComponent {
         return false;
       }
     );
-    let table: any;
-
     await this.manageService.getAllProduct().subscribe(
       (data) => {
         this.datasetProduct = data.products;
         this.datasetProduct.forEach(k => {
           let con = this.manageService.getCategory(k['category']).subscribe((res) =>{
             if(res.success && res.categories != null){
-              console.log(k['name'],res)
               k['categoryEdited'] = `${res.categories.name}`;
             }
             con.unsubscribe();
           })
         })
         $(document).ready(function () {
-          new DataTable('#tableProduct', {
+          self.tableProduct =  new DataTable('#tableProduct', {
             autoWidth: false,
             responsive: true,
             destroy: true,
@@ -285,18 +306,38 @@ export class DashboardComponent {
     $(document).on('click', '.btn-action', function (btn) {
       let datas: any = $(this).attr('value')?.split('_');
 
-      console.log(btn);
 
-      if (datas[0] == 'delete') {
+      if (datas[0] == 'deleteProduct') {
         self.manageService.deleteProduct(datas[1]).subscribe(
           (res) => {
-            console.log(res);
-            table.row($(this).parents('tr')).remove().draw();
+            self.tableProduct.row($(this).parents('tr')).remove().draw();
           },
           (err) => {
-            console.log(err);
+            console.error(err);
           }
         );
+      }else if(datas[0] == 'deleteCategory') {
+        
+        self.manageService.deleteCategory(datas[1]).subscribe(
+          (res) => {
+            self.tableCategory.row($(this).parents('tr')).remove().draw();
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
+      
+      }else if (datas[0] == 'deleteOrder') {
+        
+        self.manageService.deleteOrder(datas[1]).subscribe(
+          (res) => {
+            self.tableOrder.row($(this).parents('tr')).remove().draw();
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
+
       }
     });
     await this.manageService.getAllUsers().subscribe((data) =>{
@@ -308,12 +349,12 @@ export class DashboardComponent {
         this.datasetCategory = data.categories;
         this.datasetCategory.forEach(k => {
           let con = this.manageService.getUser(k['addedby']).subscribe((res) => {
-            k['addedbyEdited'] = `${res.users.email} (${res.users._id})`;
+            k['addedbyEdited'] = res.users.email;
             con.unsubscribe();
           })
         })
         $(document).ready(function () {
-          new DataTable('#tableCategory', {
+          self.tableCategory = new DataTable('#tableCategory', {
             autoWidth: false,
             responsive: true,
             destroy: true,
@@ -341,10 +382,19 @@ export class DashboardComponent {
     
     await this.manageService.getAllOrders().subscribe(
       (orders) => {
-        console.log(orders)
         this.datasetOrder = orders.orders;
+        this.datasetOrder.forEach(k => {
+          let con = this.manageService.getProduct(k.product).subscribe((res)=>{
+            k['productEdited'] = res.products?.name
+            con.unsubscribe();
+          })
+          let con2 = this.manageService.getUser(k.customer).subscribe((res)=>{
+            k['customerEdited'] = res.users?.email
+            con2.unsubscribe();
+          })
+        })
         $(document).ready(function () {
-          new DataTable('#tableOrder', {
+          self.tableOrder =  new DataTable('#tableOrder', {
             autoWidth: false,
             responsive: true,
             destroy: true,

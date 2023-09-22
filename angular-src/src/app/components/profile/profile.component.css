@@ -1,0 +1,17 @@
+.list-group b {
+    display: inline-block;
+    width: 30%;
+    position: relative;
+    padding-right: 10px; /* Ensures colon does not overlay the text */
+  }
+  
+.list-group b::after {
+    content: ":";
+    position: absolute;
+    right: 10px;
+}
+.tablerow,.list-group{
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    border-radius: 10px;
+}

@@ -43,7 +43,6 @@ export class RegisterComponent implements OnInit {
     }
     this.authService.registerUser(user).subscribe(data => {
       
-      console.log(data)
       if(data.success){
         this.flashMessage.showFlash("success", "Başarılı", "Kaydınız başarıyla tamamnlandı. Sisteme giriş yapabilirsiniz.");
         this.router.navigate(['/login']);

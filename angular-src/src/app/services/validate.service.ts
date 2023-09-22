@@ -18,7 +18,7 @@ export class ValidateService {
     return re.test(email);
   }
   validateProduct(data:any){
-    if( data.name == undefined || data.category == undefined || data.description == undefined ||  data.price == undefined || data.time == undefined){
+    if( data.name == undefined || data.category == undefined || data.description == undefined ||  data.price == undefined || data.time == undefined || data.image == undefined){
       return false;
     }else{
       if((this.checkNum(data.price)) && (this.checkNum(data.time)))

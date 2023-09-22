@@ -26,7 +26,6 @@ export class ManageService {
   }
 
   deleteProduct(id: any) {
-    console.log(id)
     let opts = {
       headers : new HttpHeaders({
         'Content-Type': 'application/json',
@@ -41,6 +40,44 @@ export class ManageService {
     };
     return this.http.delete<httpResponse>(
       'http://localhost:3000/dashboard/product/delete',
+      opts
+    );
+  }
+
+  deleteCategory(id: any) {
+    let opts = {
+      headers : new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: this.authService.authToken
+          ? this.authService.authToken
+          : 'noauth',
+      }),
+      body: {
+        id : id
+      }
+    };
+    return this.http.delete<httpResponse>(
+      'http://localhost:3000/dashboard/category/delete',
+      opts
+    );
+  }
+
+  deleteOrder(id: any) {
+    let opts = {
+      headers : new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: this.authService.authToken
+          ? this.authService.authToken
+          : 'noauth',
+      }),
+      body: {
+        id : id
+      }
+    };
+    return this.http.delete<httpResponse>(
+      'http://localhost:3000/dashboard/order/delete',
       opts
     );
   }
@@ -71,6 +108,8 @@ export class ManageService {
     );  
   }
   getUser(id: any) {
+    
+    this.authService.loadToken();
     let  headers = new HttpHeaders({
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -86,6 +125,8 @@ export class ManageService {
   }
 
   getCategory(id: any) {
+    
+    this.authService.loadToken();
     let  headers = new HttpHeaders({
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -96,6 +137,21 @@ export class ManageService {
     
     return this.http.post<httpResponse>(
       'http://localhost:3000/dashboard/category/getByID',
+      {id:id}, {headers: headers}
+    );
+  }
+
+  getProduct(id: any) {
+    let  headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: this.authService.authToken
+          ? this.authService.authToken
+          : 'noauth',
+      })
+    
+    return this.http.post<httpResponse>(
+      'http://localhost:3000/dashboard/product/getByID',
       {id:id}, {headers: headers}
     );
   }
@@ -206,6 +262,21 @@ export class ManageService {
     return this.http.post<httpResponse>(
       'http://localhost:3000/dashboard/category/add',
       data, {headers: headers}
+    );
+  }
+
+  getOrdersByUser(){
+    let  headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: this.authService.authToken
+        ? this.authService.authToken
+        : 'noauth',
+    })
+  
+    return this.http.get<httpResponse>(
+      'http://localhost:3000/dashboard/order/findByUser',
+      {headers: headers}
     );
   }
 }

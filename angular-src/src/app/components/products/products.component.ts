@@ -23,16 +23,14 @@ export class ProductsComponent {
     private authService:AuthService
   ){}
   order(id:any){
-    let userData = this.authService.getUserData();
     let sendata = {
-      product: id,
-      customer: userData.id
+      product: id
     };
-    console.log(sendata)
     this.manageService.addOrder(id, sendata).subscribe((res) => {
       console.log(res)
     })
   }
+  
   ngOnInit(){
     this.logged = this.authService.loggedIn();
     if(this.logged){
@@ -44,19 +42,29 @@ export class ProductsComponent {
         return false;
       });
     }
-      let cato = this.manageService.getAllCategory().subscribe((data)=>{
-        this.datasetCategory = data.categories;
-        for(let catrow of this.datasetCategory){
-          this.manageService.getProductsByCategory({category : catrow.name}).subscribe((data2)=>{
-            this.datasetCategory.find(k => k.name == catrow.name)['products'] = data2.products;
-            $('ul#pills-tab li:first').children().first().addClass('active')
-            $('ul#pills-tab li:first').children().first().addClass('active')
-            $('#pills-tabContent').children().first().addClass('show active')
-            cato.unsubscribe();
-          })
-        }
-        console.log(this.datasetCategory);
-      })
+
+    let cato = this.manageService.getAllCategory().subscribe((data)=>{
+      this.datasetCategory = data.categories;
+      for(let catrow of data.categories){
+        this.manageService.getProductsByCategory({category : catrow._id}).subscribe((data2)=>{
+          if(data2.products.length == 0){
+            this.datasetCategory = this.datasetCategory.filter(category => category._id !== catrow._id);
+          }else{
+            this.datasetCategory.find(k => k._id == catrow._id)['products'] = data2.products;
+          }
+          
+          cato.unsubscribe();
+        })
+      }
+      console.log(this.datasetCategory);
+    })
+
+    setTimeout(() => {
+      
+    $('ul#pills-tab li:first').children().first().addClass('active')
+    $('#pills-tabContent').children().first().addClass('show active')
+    }, 1000);    
+      
       
   }
 }

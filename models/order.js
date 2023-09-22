@@ -32,7 +32,7 @@ const orderSchema = mongoose.Schema({
 const Order = module.exports = mongoose.model('Order', orderSchema );
 
 module.exports.getCategoryById =  function (id, callback) {
-    Category.findById(id)
+    Order.findById(id)
     .then((user)=> {return callback(null,user)})
     .catch((err) => {return callback(err)});
 
@@ -40,9 +40,9 @@ module.exports.getCategoryById =  function (id, callback) {
 
 module.exports.getOrdersByCustomer = function (id, callback){
     const query = { customer : id }
-    Category.find(query).then((data) => {;return callback(null,data)}).catch((err) => {return callback(err)});
+    Order.find(query).then((data) => {return callback(null,data)}).catch((err) => {return callback(err)});
 }
 
 module.exports.deleteById = function (id, callback){
-    Category.findOneAndDelete(id).then((data) => {;return callback(null,data)}).catch((err) => {return callback(err)});
+    Order.findByIdAndDelete(id).then((data) => {return callback(null,data);}).catch((err) => {return callback(err)});
 }
