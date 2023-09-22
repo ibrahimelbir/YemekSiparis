@@ -33,6 +33,10 @@ export class ProfileComponent {
     {
       val : 3,
       msg : "Sipariş teslim edildi."
+    },
+    {
+      val : 4,
+      msg : "Sipariş iptal edildi."
     }
     
     
