@@ -43,7 +43,6 @@ export class AuthService {
       Accept: 'application/json',
       Authorization: this.authToken ? this.authToken : 'noauth',
     });
-    console.log(headers.get('Authorization'))
 
     return this.http.get<httpResponse>('http://localhost:3000/profiles', {
       headers: headers,
